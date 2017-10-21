@@ -33,10 +33,9 @@ public class DailyBudgetTest {
     private static final Date FIRST_DAY_OF_PERIOD = valueOf("2000-04-01");
     private static final Date TODAY = valueOf("2000-04-06");
 
-    @Mock
-    private IBudgetDatabase budgetDatabase;
-    @Mock
-    private Calendar calendar;
+    @Mock private IBudgetDatabase budgetDatabase;
+    @Mock private Calendar calendar;
+    @Mock private Calendar firstDayOfPeriodCalendar;
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
@@ -45,9 +44,11 @@ public class DailyBudgetTest {
     @Before
     public void setup() {
         sut = new DailyBudget(budgetDatabase, calendar);
-        when(calendar.getTimeInMillis()).thenReturn(FIRST_DAY_OF_PERIOD.getTime());
         when(calendar.get(Calendar.DAY_OF_MONTH)).thenReturn(DAY_OF_MONTH);
         when(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)).thenReturn(DAYS_OF_MONTH);
+        when(calendar.clone()).thenReturn(firstDayOfPeriodCalendar);
+        when(calendar.getTimeInMillis()).thenReturn(TODAY.getTime());
+        when(firstDayOfPeriodCalendar.getTimeInMillis()).thenReturn(FIRST_DAY_OF_PERIOD.getTime());
         when(budgetDatabase.getBudgetId(BUDGET.getName())).thenReturn(BUDGET_ID);
         when(budgetDatabase.getBudget(BUDGET.getName())).thenReturn(BUDGET);
     }
@@ -71,5 +72,21 @@ public class DailyBudgetTest {
                                           new Expenditure("", 50, TODAY)));
 
         assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
+    }
+
+
+    @Test
+    public void shouldCorrectCalculateRemainingBudgetWithExpenditures() {
+        double expectedDailyBudget = 35.00;
+        double expectedRemainingBudget = 10.00;
+
+        when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
+                .thenReturn(Arrays.asList(
+                        new Expenditure("", 100, FIRST_DAY_OF_PERIOD),
+                        new Expenditure("", 25, TODAY)));
+        when(budgetDatabase.getExpenditures(BUDGET_ID, TODAY))
+                .thenReturn(Arrays.asList(new Expenditure("", 25, TODAY)));
+
+        assertEquals(expectedRemainingBudget, sut.getDailyRemainingBudget(BUDGET.getName()), 0.001);
     }
 }

@@ -28,28 +28,34 @@ public class DailyBudget {
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         int today = calendar.get(Calendar.DAY_OF_MONTH);
         int daysLeft = daysInMonth - today + beginningDay;
-        int amount = getAmount(name);
+        Date firstDayOfPeriod = getFirstDayOfPeriod();
+        int amount = getAmount(name, firstDayOfPeriod);
 
         return (monthlyBudget - amount) / daysLeft;
     }
 
-    private int getAmount(String name) {
+    public double getDailyRemainingBudget(String name) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date today = new Date(calendar.getTimeInMillis());
+        return getDailyBudget(name) - getAmount(name, today);
+    }
+
+    private int getAmount(String name, Date fromDate) {
         int amount = 0;
         int budgetId = budgetDatabase.getBudgetId(name);
-        Date firstDayOfPeriod = getFirstDayOfPeriod();
-        List<Expenditure> expenditures = budgetDatabase.getExpenditures(budgetId, firstDayOfPeriod);
+        List<Expenditure> expenditures = budgetDatabase.getExpenditures(budgetId, fromDate);
         for (Expenditure expenditure: expenditures)
             amount += expenditure.getAmount();
         return amount;
     }
 
     private Date getFirstDayOfPeriod() {
+        Calendar calendar = (Calendar) this.calendar.clone();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Date firstDay = new Date(calendar.getTimeInMillis());
         return firstDay;
-    }
-
-    public double getDailyRemainingBudget() {
-        return 0;
     }
 }
