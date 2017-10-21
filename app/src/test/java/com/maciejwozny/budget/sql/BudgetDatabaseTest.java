@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
         manifest = "src/main/AndroidManifest.xml")
 public class BudgetDatabaseTest {
     private final Budget BUDGET = new Budget("name", 1, 1000);
+    private final int BUDGET_ID = 123;
 
     private BudgetDatabase sut;
     private SQLiteDatabase database;
@@ -79,11 +80,11 @@ public class BudgetDatabaseTest {
 
     @Test
     public void shouldCorrectInsertExpensesIntoDatabase() {
-        Expenditure expenditure = new Expenditure(0, "name", -500, new Date(1234567890123l));
+        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, new Date(1234567890123l));
         List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(expenditure));
 
         sut.insertExpenditure(expenditure);
 
-        assertEquals(expectedExpenditures, sut.getExpenditures());
+        assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID));
     }
 }

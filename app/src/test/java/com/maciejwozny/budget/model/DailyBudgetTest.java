@@ -13,8 +13,10 @@ import org.mockito.junit.MockitoRule;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
+import static java.sql.Date.valueOf;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
@@ -22,6 +24,14 @@ import static org.mockito.Mockito.when;
  * Created by maciej on 21.10.17.
  */
 public class DailyBudgetTest {
+    private static final int MONTHLY_BUDGET = 1000;
+    private static final int BEGINNING_DAY = 1;
+    private static final int DAYS_OF_MONTH = 30;
+    private static final int DAY_OF_MONTH = 6;
+    private static final Budget BUDGET = new Budget("name", BEGINNING_DAY, MONTHLY_BUDGET);
+    private static final int BUDGET_ID = 123;
+    private static final Date TODAY = valueOf("2000-04-06");
+
     @Mock
     private IBudgetDatabase budgetDatabase;
     @Mock
@@ -34,23 +44,31 @@ public class DailyBudgetTest {
     @Before
     public void setup() {
         sut = new DailyBudget(budgetDatabase, calendar);
+        when(calendar.get(Calendar.DAY_OF_MONTH)).thenReturn(DAY_OF_MONTH);
+        when(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)).thenReturn(DAYS_OF_MONTH);
+        when(budgetDatabase.getBudgetId(BUDGET.getName())).thenReturn(BUDGET_ID);
+        when(budgetDatabase.getBudget(BUDGET.getName())).thenReturn(BUDGET);
     }
 
     @Test
-    public void shouldCorrectCalculateDailyBudget() {
-        int monthlyBudget = 1000;
-        int beginningDay = 1;
-        int daysOfMonth = 30;
-        int dayOfMonth = 6;
-        Budget budget = new Budget("name", beginningDay, monthlyBudget);
+    public void shouldCorrectCalculateDailyBudgetWithoutAnyExpenditures() {
         double expectedDailyBudget = 40.00;
 
-        when(calendar.get(Calendar.DAY_OF_MONTH)).thenReturn(dayOfMonth);
-        when(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)).thenReturn(daysOfMonth);
-        when(budgetDatabase.getBudget(budget.getName())).thenReturn(budget);
-        when(budgetDatabase.getExpenditures()).thenReturn(new ArrayList<Expenditure>());
+        when(budgetDatabase.getExpenditures(BUDGET_ID)).thenReturn(new ArrayList<Expenditure>());
 
-        assertEquals(expectedDailyBudget, sut.getDailyBudget(budget.getName()), 0.001);
+        assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
+    }
+
+
+    @Test
+    public void shouldCorrectCalculateDailyBudgetWithExpenditures() {
+        Expenditure expenditure1 = new Expenditure("", 25, TODAY);
+        Expenditure expenditure2 = new Expenditure("", 50, TODAY);
+        double expectedDailyBudget = 37.00;
+
+        when(budgetDatabase.getExpenditures(BUDGET_ID)).thenReturn(Arrays.asList(expenditure1, expenditure2));
+
+        assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
     }
 
 }

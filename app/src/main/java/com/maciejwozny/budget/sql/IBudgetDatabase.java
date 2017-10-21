@@ -16,5 +16,5 @@ public interface IBudgetDatabase {
     int getBudgetId(String budgetName);
 
     void insertExpenditure(Expenditure expenditure);
-    List<Expenditure> getExpenditures();
+    List<Expenditure> getExpenditures(int budgetId);
 }
