@@ -5,12 +5,12 @@ package com.maciejwozny.budget.sql.tables;
  * Created by maciek on 31.01.16.
  */
 public class Budget {
-    public static final String tableBudgetName = "Budgets";
-    public static final String budgetId = "budgetId";
-    public static final String budgetName = "budgetName";
-    public static final String budgetBeginningDay = "budgetBeginningDay";
-    public static final String budgetPeriod = "budgetPeriod";
-    public static final String budgetRepeatedly = "budgetRepeatedly";
+    public static final String TABLE_BUDGET_NAME = "Budgets";
+    public static final String BUDGET_ID = "BUDGET_ID";
+    public static final String BUDGET_NAME = "BUDGET_NAME";
+    public static final String BUDGET_BEGINNING_DAY = "BUDGET_BEGINNING_DAY";
+    public static final String BUDGET_PERIOD = "BUDGET_PERIOD";
+    public static final String BUDGET_REPEATEDLY = "BUDGET_REPEATEDLY";
 
 
     private final String name;

@@ -10,7 +10,7 @@ public enum Period {
 
     private final int id;
 
-    private Period(int id) {
+    Period(int id) {
         this.id = id;
     }
 

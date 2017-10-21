@@ -1,10 +1,10 @@
 package com.maciejwozny.budget.sql;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
 
 import com.maciejwozny.budget.BuildConfig;
 import com.maciejwozny.budget.sql.tables.Budget;
+import com.maciejwozny.budget.sql.tables.Expenditure;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,12 +14,11 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static org.junit.Assert.*;
@@ -32,6 +31,8 @@ import static org.junit.Assert.*;
         sdk = LOLLIPOP,
         manifest = "src/main/AndroidManifest.xml")
 public class DatabaseAdapterTest {
+    private final Budget BUDGET = new Budget("name", 1);
+
     private DatabaseAdapter sut;
     private SQLiteDatabase database;
 
@@ -39,7 +40,6 @@ public class DatabaseAdapterTest {
     public void setup() {
         sut = new DatabaseAdapter(RuntimeEnvironment.application);
         database = sut.getWritableDatabase();
-//        sut.onCreate(database);
     }
 
     @After
@@ -54,14 +54,29 @@ public class DatabaseAdapterTest {
 
     @Test
     public void shouldCorrectInsertBudgetIntoDatabase() {
-        Budget budget = new Budget("name", 1);
-        List<Budget> expectedBudgets = new ArrayList<>(Arrays.asList(budget));
+        List<Budget> expectedBudgets = new ArrayList<>(Arrays.asList(BUDGET));
 
-        sut.insertBudget(budget);
+        sut.insertBudget(BUDGET);
 
         assertEquals(expectedBudgets, sut.getBudgets());
     }
 
+    @Test
+    public void shouldCorrectReturnBudgetId() {
+        int expectedBudgetId = 0;
 
+        sut.insertBudget(BUDGET);
 
+        assertEquals(expectedBudgetId, sut.getBudgetId(BUDGET.getName()));
+    }
+
+    @Test
+    public void shouldCorrectInsertExpensesIntoDatabase() {
+        Expenditure expenditure = new Expenditure(0, "name", -500, new Date(1234567890123l));
+        List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(expenditure));
+
+        sut.insertExpenditure(expenditure);
+
+        assertEquals(expectedExpenditures, sut.getExpenditures());
+    }
 }
