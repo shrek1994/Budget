@@ -80,11 +80,32 @@ public class BudgetDatabaseTest {
 
     @Test
     public void shouldCorrectInsertExpensesIntoDatabase() {
-        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, new Date(1234567890123l));
+        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-05"));
         List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(expenditure));
 
         sut.insertExpenditure(expenditure);
 
-        assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID));
+        assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+    }
+
+
+    @Test
+    public void shouldNotGetExpensesBeforeDate() {
+        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-01"));
+
+        sut.insertExpenditure(expenditure);
+
+        assertEquals(new ArrayList<Expenditure>(),
+                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-05")));
+    }
+
+    @Test
+    public void shouldGetExpensesFromTheSameDay() {
+        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-01"));
+        List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(expenditure));
+
+        sut.insertExpenditure(expenditure);
+
+        assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
     }
 }

@@ -30,6 +30,7 @@ public class DailyBudgetTest {
     private static final int DAY_OF_MONTH = 6;
     private static final Budget BUDGET = new Budget("name", BEGINNING_DAY, MONTHLY_BUDGET);
     private static final int BUDGET_ID = 123;
+    private static final Date FISRT_DAY_OF_PERIOD = valueOf("2000-04-01");
     private static final Date TODAY = valueOf("2000-04-06");
 
     @Mock
@@ -54,7 +55,7 @@ public class DailyBudgetTest {
     public void shouldCorrectCalculateDailyBudgetWithoutAnyExpenditures() {
         double expectedDailyBudget = 40.00;
 
-        when(budgetDatabase.getExpenditures(BUDGET_ID)).thenReturn(new ArrayList<Expenditure>());
+        when(budgetDatabase.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01"))).thenReturn(new ArrayList<Expenditure>());
 
         assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
     }
@@ -62,13 +63,12 @@ public class DailyBudgetTest {
 
     @Test
     public void shouldCorrectCalculateDailyBudgetWithExpenditures() {
-        Expenditure expenditure1 = new Expenditure("", 25, TODAY);
-        Expenditure expenditure2 = new Expenditure("", 50, TODAY);
         double expectedDailyBudget = 37.00;
 
-        when(budgetDatabase.getExpenditures(BUDGET_ID)).thenReturn(Arrays.asList(expenditure1, expenditure2));
+        when(budgetDatabase.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")))
+                .thenReturn(Arrays.asList(new Expenditure("", 25, TODAY),
+                                          new Expenditure("", 50, TODAY)));
 
         assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
     }
-
 }

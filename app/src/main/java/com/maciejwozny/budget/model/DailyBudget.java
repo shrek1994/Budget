@@ -30,7 +30,7 @@ public class DailyBudget {
         int daysLeft = daysInMonth - today + beginningDay;
 
         int budgetId = budgetDatabase.getBudgetId(name);
-        List<Expenditure> expenditures = budgetDatabase.getExpenditures(budgetId);
+        List<Expenditure> expenditures = budgetDatabase.getExpenditures(budgetId, Date.valueOf("2000-04-01"));
         int amount = 0;
         for (Expenditure expenditure: expenditures)
             amount += expenditure.getAmount();

@@ -157,11 +157,11 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     }
 
     @Override
-    public List<Expenditure> getExpenditures(int budgetId) {
+    public List<Expenditure> getExpenditures(int budgetId, Date fromDate) {
         List<Expenditure> expenditures = new ArrayList<>();
 
-        String selection = EXPENDITURE_BUDGET_ID + " = ?";
-        String[] selectionArgs = { Integer.toString(budgetId) };
+        String selection = EXPENDITURE_BUDGET_ID + " = ? and " + EXPENDITURE_DATE + " >= ?";
+        String[] selectionArgs = { Integer.toString(budgetId), Long.toString(fromDate.getTime()) };
         Cursor cursor = getWritableDatabase().query(
                 TABLE_EXPENSES_NAME,
                 new String[]{EXPENDITURE_NAME,
