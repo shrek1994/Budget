@@ -1,7 +1,8 @@
 package com.maciejwozny.budget.sql;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.support.compat.BuildConfig;
+
+import com.maciejwozny.budget.BuildConfig;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,15 +20,13 @@ import static org.junit.Assert.*;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class,
         sdk = LOLLIPOP,
-        packageName = "com.maciejwozny.budget.sql",
-        manifest = "/src/main/AndroidManifest.xml")
+        manifest = "src/main/AndroidManifest.xml")
 public class DatabaseAdapterTest {
     private DatabaseAdapter sut;
 
     @Before
     public void setup() {
         sut = new DatabaseAdapter(RuntimeEnvironment.application);
-
     }
 
     @Test

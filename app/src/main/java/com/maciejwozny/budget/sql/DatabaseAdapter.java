@@ -24,7 +24,7 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
     private String createBudgets =
             createTable + tableBudgetName +
                     " ( " +
-                    budgetId + " int primary key AUTO_INCREMENT, " +
+                    budgetId + " int primary key, " +
                     budgetName + " varchar(50) not null, " +
                     budgetBeginningDay + " int default 1, " +
                     budgetPeriod + " int, " +
@@ -33,13 +33,13 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
 
     private String createExpenses =
             createTable + tableExpensesName + " ( " +
-                    expenseId + " int primary key AUTO_INCREMENT, " +
+                    expenseId + " int primary key, " +
                     expenseBudgetId + " int, " +
                     expenseAmount + " int not null, " +
                     expenseDate + " date not null, " +
                     expenseName + " varchar(50), " +
-                    "FOREIGN KEY (" + expenseBudgetId + ") " +
-                    "REFERENCES " + tableBudgetName + "(" + budgetId + "), " +
+                    "FOREIGN KEY ( " + expenseBudgetId + " ) " +
+                    "REFERENCES " + tableBudgetName + "( " + budgetId + " ) " +
                     ");";
 
     DatabaseAdapter(Context context){
