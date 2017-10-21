@@ -17,4 +17,17 @@ public enum Period {
     public int getId() {
         return id;
     }
+
+    static public Period getPeriod(int i)
+    {
+        switch (i) {
+            case 0:
+                return Days;
+            case 1:
+                return Months;
+            case 2:
+                return Years;
+        }
+        return Months;
+    }
 }

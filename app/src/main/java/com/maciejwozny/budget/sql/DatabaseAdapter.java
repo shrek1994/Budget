@@ -2,16 +2,19 @@ package com.maciejwozny.budget.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.maciejwozny.budget.sql.tables.Budget;
+import com.maciejwozny.budget.sql.tables.Period;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.maciejwozny.budget.sql.tables.Budget.*;
 import static com.maciejwozny.budget.sql.tables.Expenses.*;
+import static com.maciejwozny.budget.sql.tables.Period.getPeriod;
 
 /**
  * Created by maciek on 30.01.16.
@@ -19,8 +22,9 @@ import static com.maciejwozny.budget.sql.tables.Expenses.*;
 public class DatabaseAdapter extends SQLiteOpenHelper {
     private static final int version = 20171021;
 
-    public static final String databaseBudgetName = "PoorBudget.db";
-    private String createTable =  "create table if not exists ";
+    private static final String databaseBudgetName = "PoorBudget.db";
+    private final String createTable =  "create table if not exists ";
+
     private String createBudgets =
             createTable + tableBudgetName +
                     " ( " +
@@ -70,6 +74,24 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
     public List<Budget> getBudgets() {
         List<Budget> budgets = new ArrayList<>();
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(
+                tableBudgetName,
+                new String[]{budgetName,
+                            budgetBeginningDay,
+                            budgetRepeatedly,
+                            budgetPeriod},
+                null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(budgetName));
+                int beginningDay = cursor.getInt(cursor.getColumnIndexOrThrow(budgetBeginningDay));
+                boolean isRepeatedly = cursor.getInt(cursor.getColumnIndexOrThrow(budgetRepeatedly)) > 0;
+                int period = cursor.getInt(cursor.getColumnIndexOrThrow(budgetPeriod));
+                budgets.add(new Budget(name, beginningDay, getPeriod(period), isRepeatedly));
+            } while (cursor.moveToNext());
+        }
         return budgets;
     }
 }
