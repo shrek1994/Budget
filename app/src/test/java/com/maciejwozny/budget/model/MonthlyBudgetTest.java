@@ -54,7 +54,7 @@ public class MonthlyBudgetTest {
 
     @Test
     public void shouldCorrectReturnMonthlyBudget() {
-        assertEquals(MONTHLY_BUDGET, sut.getMonthlyBugdget(), 0.001);
+        assertEquals(MONTHLY_BUDGET, sut.getMonthlyBudget(BUDGET.getName()), 0.001);
     }
 
 
@@ -63,20 +63,18 @@ public class MonthlyBudgetTest {
         double amount = 50;
 
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
-                .thenReturn(Arrays.asList(new Expenditure("", 25, TODAY),
-                        new Expenditure("", (int)amount, TODAY)));
+                .thenReturn(Arrays.asList(new Expenditure("name", (int)amount, TODAY)));
 
-        assertEquals(amount, sut.getMonthlySpends(), 0.001);
+        assertEquals(amount, sut.getMonthlySpends(BUDGET.getName()), 0.001);
     }
 
 
     @Test
     public void shouldCorrectReturnMonthlyRemaining() {
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
-                .thenReturn(Arrays.asList(new Expenditure("", 25, TODAY),
-                        new Expenditure("", 50, TODAY)));
+                .thenReturn(Arrays.asList(new Expenditure("name", 50, TODAY)));
 
-        assertEquals(950.0, sut.getMonthlyRemaining(), 0.001);
+        assertEquals(950.0, sut.getMonthlyRemaining(BUDGET.getName()), 0.001);
     }
 
 }

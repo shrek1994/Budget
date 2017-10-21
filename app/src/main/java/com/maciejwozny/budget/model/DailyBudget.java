@@ -53,6 +53,7 @@ public class DailyBudget {
     }
 
     private Date getFirstDayOfPeriod() {
+        //TODO propably is wrong - don't added starting day
         Calendar calendar = (Calendar) this.calendar.clone();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Date firstDay = new Date(calendar.getTimeInMillis());
