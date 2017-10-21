@@ -30,15 +30,15 @@ import static org.junit.Assert.*;
 @Config(constants = BuildConfig.class,
         sdk = LOLLIPOP,
         manifest = "src/main/AndroidManifest.xml")
-public class DatabaseAdapterTest {
-    private final Budget BUDGET = new Budget("name", 1);
+public class BudgetDatabaseTest {
+    private final Budget BUDGET = new Budget("name", 1, 1000);
 
-    private DatabaseAdapter sut;
+    private BudgetDatabase sut;
     private SQLiteDatabase database;
 
     @Before
     public void setup() {
-        sut = new DatabaseAdapter(RuntimeEnvironment.application);
+        sut = new BudgetDatabase(RuntimeEnvironment.application);
         database = sut.getWritableDatabase();
     }
 
@@ -59,6 +59,13 @@ public class DatabaseAdapterTest {
         sut.insertBudget(BUDGET);
 
         assertEquals(expectedBudgets, sut.getBudgets());
+    }
+
+    @Test
+    public void shouldCorrectReturnBudgetUsingName() {
+        sut.insertBudget(BUDGET);
+
+        assertEquals(BUDGET, sut.getBudget(BUDGET.getName()));
     }
 
     @Test
