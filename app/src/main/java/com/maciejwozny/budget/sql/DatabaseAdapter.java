@@ -26,13 +26,12 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
     public static final String databaseBudgetName = "PoorBudget.db";
     private String createTable =  "create table if not exists ";
     private String createBudgets =
-            createTable + tableBudgetName +
+            createTable + TABLE_BUDGET_NAME +
                     " ( " +
-                    budgetId + " int primary key, " +
-                    budgetName + " varchar(50) not null, " +
-                    budgetBeginningDay + " int default 1, " +
-                    budgetPeriod + " int, " +
-                    budgetRepeatedly + " boolean default false " +
+                    BUDGET_ID + " int primary key, " +
+                    BUDGET_NAME + " varchar(50) not null, " +
+                    BUDGET_BEGINNING_DAY + " int default 1, " +
+                    BUDGET_MONTHLY_BUDGET + " int " +
                     ");";
 
     private String createExpenses =
@@ -43,7 +42,7 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
                     expenseDate + " date not null, " +
                     expenseName + " varchar(50), " +
                     "FOREIGN KEY ( " + expenseBudgetId + " ) " +
-                    "REFERENCES " + tableBudgetName + "( " + budgetId + " ) " +
+                    "REFERENCES " + TABLE_BUDGET_NAME + "( " + BUDGET_ID + " ) " +
                     ");";
 
     DatabaseAdapter(Context context){
@@ -64,27 +63,25 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
     public void insertBudget(Budget budget) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(budgetName, budget.getName());
-        values.put(budgetBeginningDay, budget.getBeginningDay());
-        values.put(budgetPeriod, budget.getPeriod().getId());
-        values.put(budgetRepeatedly, budget.isRepeatedly());
-        database.insert(tableBudgetName, null, values);
+        values.put(BUDGET_NAME, budget.getName());
+        values.put(BUDGET_BEGINNING_DAY, budget.getBeginningDay());
+        values.put(BUDGET_MONTHLY_BUDGET, budget.getMonthlyBudget());
+        database.insert(TABLE_BUDGET_NAME, null, values);
     }
 
     public List<Budget> getBudgets() {
         List<Budget> budgets = new ArrayList<>();
 
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor c = database.rawQuery("SELECT " + budgetName + ", " + budgetBeginningDay + ", " +
-                budgetPeriod + ", " + budgetRepeatedly + " FROM " + tableBudgetName, null);
+        Cursor c = database.rawQuery("SELECT " + BUDGET_NAME + ", " + BUDGET_BEGINNING_DAY + ", " +
+                BUDGET_MONTHLY_BUDGET + " FROM " + TABLE_BUDGET_NAME, null);
         if (c.moveToFirst()){
             do {
                 String name = c.getString(0);
                 int beginningDay = c.getInt(1);
-                Period period = Period.toPeriod(c.getInt(2));
-                boolean repeatedly = c.getInt(3) > 0;
+                int monthlyBudget = c.getInt(2);
 
-                budgets.add(new Budget(name, beginningDay, period, repeatedly));
+                budgets.add(new Budget(name, beginningDay, monthlyBudget));
             } while(c.moveToNext());
         }
         c.close();

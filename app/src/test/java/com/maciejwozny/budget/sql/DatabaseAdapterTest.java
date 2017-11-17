@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
         manifest = "src/main/AndroidManifest.xml")
 public class DatabaseAdapterTest {
     private DatabaseAdapter sut;
-    private Budget budget = new Budget("bank", 10, Period.Months, true);
+    private Budget budget = new Budget("bank", 10, 1000);
     private Expense expense = new Expense("dinner", 123, new Date(123456789));
 
     @Before

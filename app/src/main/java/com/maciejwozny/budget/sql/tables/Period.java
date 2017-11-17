@@ -10,7 +10,7 @@ public enum Period {
 
     private final int id;
 
-    private Period(int id) {
+    Period(int id) {
         this.id = id;
     }
 
@@ -18,11 +18,15 @@ public enum Period {
         return id;
     }
 
-    public static Period toPeriod(int i) {
+    static public Period getPeriod(int i)
+    {
         switch (i) {
-            case 0: return Days;
-            case 1: return Months;
-            case 2: return Years;
+            case 0:
+                return Days;
+            case 1:
+                return Months;
+            case 2:
+                return Years;
         }
         return Months;
     }
