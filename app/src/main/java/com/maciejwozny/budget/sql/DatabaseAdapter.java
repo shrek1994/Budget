@@ -2,16 +2,20 @@ package com.maciejwozny.budget.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.maciejwozny.budget.sql.tables.Budget;
+import com.maciejwozny.budget.sql.tables.Expense;
+import com.maciejwozny.budget.sql.tables.Period;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.maciejwozny.budget.sql.tables.Budget.*;
-import static com.maciejwozny.budget.sql.tables.Expenses.*;
+import static com.maciejwozny.budget.sql.tables.Expense.*;
 
 /**
  * Created by maciek on 30.01.16.
@@ -70,6 +74,48 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
     public List<Budget> getBudgets() {
         List<Budget> budgets = new ArrayList<>();
 
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor c = database.rawQuery("SELECT " + budgetName + ", " + budgetBeginningDay + ", " +
+                budgetPeriod + ", " + budgetRepeatedly + " FROM " + tableBudgetName, null);
+        if (c.moveToFirst()){
+            do {
+                String name = c.getString(0);
+                int beginningDay = c.getInt(1);
+                Period period = Period.toPeriod(c.getInt(2));
+                boolean repeatedly = c.getInt(3) > 0;
+
+                budgets.add(new Budget(name, beginningDay, period, repeatedly));
+            } while(c.moveToNext());
+        }
+        c.close();
         return budgets;
+    }
+
+    public void insertExpense(Expense expense) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(expenseName, expense.getName());
+        values.put(expenseAmount, expense.getAmount());
+        values.put(expenseDate, expense.getDate().toString());
+        database.insert(tableExpensesName, null, values);
+    }
+
+    public List<Expense> getExpenses() {
+        List<Expense> expenses = new ArrayList<>();
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor c = database.rawQuery("SELECT " + expenseName + ", " +
+                expenseAmount + ", " + expenseDate + " FROM " + tableExpensesName, null);
+        if (c.moveToFirst()){
+            do {
+                String name = c.getString(0);
+                int amount = c.getInt(1);
+                Date date = new Date(c.getLong(2));
+
+                expenses.add(new Expense(name, amount, date));
+            } while(c.moveToNext());
+        }
+        c.close();
+
+        return expenses;
     }
 }

@@ -59,4 +59,14 @@ public class Budget {
 
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Budget{" +
+                "name='" + name + '\'' +
+                ", beginningDay=" + beginningDay +
+                ", period=" + period +
+                ", repeatedly=" + repeatedly +
+                '}';
+    }
 }
