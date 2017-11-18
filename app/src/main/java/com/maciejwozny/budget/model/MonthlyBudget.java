@@ -20,11 +20,11 @@ public class MonthlyBudget {
         this.calendar = calendar;
     }
 
-    double getMonthlyBudget(String budgetName) {
+    public double getMonthlyBudget(String budgetName) {
         return budgetDatabase.getBudget(budgetName).getMonthlyBudget();
     }
 
-    double getMonthlySpends(String budgetName) {
+    public double getMonthlySpends(String budgetName) {
         Budget budget = budgetDatabase.getBudget(budgetName);
         int beginningDay = budget.getBeginningDay();
         Date firstDayOfPeriod = getFirstDayOfPeriod(beginningDay);
@@ -32,7 +32,7 @@ public class MonthlyBudget {
         return amount;
     }
 
-    double getMonthlyRemaining(String budgetName) {
+    public double getMonthlyRemaining(String budgetName) {
         return getMonthlyBudget(budgetName) - getMonthlySpends(budgetName);
     }
 
