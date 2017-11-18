@@ -19,6 +19,7 @@ import static java.lang.String.valueOf;
  */
 
 public class AddExpenseView implements View.OnClickListener {
+    private static final String TAG = AddExpenseView.class.getSimpleName();
     Calendar myCalendar = Calendar.getInstance();
     private EditText expenseName;
     private EditText expenseAmount;

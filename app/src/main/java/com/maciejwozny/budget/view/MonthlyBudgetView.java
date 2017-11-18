@@ -1,5 +1,6 @@
 package com.maciejwozny.budget.view;
 
+import android.util.Log;
 import android.widget.TextView;
 
 import com.maciejwozny.budget.BudgetActivity;
@@ -13,6 +14,7 @@ import java.util.Observer;
  */
 
 public class MonthlyBudgetView implements Observer {
+    private static final String TAG = MonthlyBudgetView.class.getSimpleName();
     private TextView monthlyBudgetText;
     private TextView monthlySpends;
     private TextView remainingMonthlyBudget;
@@ -28,6 +30,7 @@ public class MonthlyBudgetView implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        Log.d(TAG, "refreshing");
         monthlyBudgetText.setText("Monthly budget: "
                 + monthlyBudget.getMonthlyBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
         monthlySpends.setText("Monthly spends: "

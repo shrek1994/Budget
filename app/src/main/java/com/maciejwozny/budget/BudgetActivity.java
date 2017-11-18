@@ -46,8 +46,10 @@ public class BudgetActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Your database was removed !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                database.onUpgrade(database.getWritableDatabase(), 0, 0);
+                expenseAdditional.notifyObservers();
             }
         });
 

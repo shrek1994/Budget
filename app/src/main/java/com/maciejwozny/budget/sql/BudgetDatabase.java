@@ -58,15 +58,25 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(createBudgets);
-        db.execSQL(createExpenses);
-
-        insertBudget(BudgetActivity.DEFAULT_BUDGET, db);
+        createDatabase(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        dropDownDatabase(db);
+        createDatabase(db);
+    }
 
+    private void dropDownDatabase(SQLiteDatabase db) {
+        db.delete(TABLE_BUDGET_NAME, null, null);
+        db.delete(TABLE_EXPENSES_NAME, null, null);
+    }
+
+    private void createDatabase(SQLiteDatabase db) {
+        db.execSQL(createBudgets);
+        db.execSQL(createExpenses);
+
+        insertBudget(BudgetActivity.DEFAULT_BUDGET, db);
     }
 
     private void insertBudget(Budget budget, SQLiteDatabase database) {

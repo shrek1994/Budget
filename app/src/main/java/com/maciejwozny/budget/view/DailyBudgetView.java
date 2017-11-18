@@ -1,5 +1,6 @@
 package com.maciejwozny.budget.view;
 
+import android.util.Log;
 import android.widget.TextView;
 
 import com.maciejwozny.budget.BudgetActivity;
@@ -13,6 +14,7 @@ import java.util.Observer;
  */
 
 public class DailyBudgetView implements Observer {
+    private static final String TAG = DailyBudgetView.class.getSimpleName();
     private TextView todayBudget;
     private TextView remainingDailyBudget;
     private DailyBudget dailyBudget;
@@ -26,6 +28,7 @@ public class DailyBudgetView implements Observer {
 
     @Override
     public void update(Observable o, Object obj) {
+        Log.d(TAG, "refreshing");
         todayBudget.setText("Today's budget: "
                 + dailyBudget.getDailyBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
         remainingDailyBudget.setText("Today's remaining budget: "
