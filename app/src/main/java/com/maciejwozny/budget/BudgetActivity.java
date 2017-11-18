@@ -66,10 +66,10 @@ public class BudgetActivity extends AppCompatActivity {
         monthlyBudgetView = new MonthlyBudgetView(monthlyBudget, monthlySpends, remainedMonthly, this.monthlyBudget);
 
         EditText nameExpense = (EditText) findViewById(R.id.nameExpenseEditText);
-        EditText amontExpense = (EditText) findViewById(R.id.amontExpenseEditText);
+        EditText amountExpense = (EditText) findViewById(R.id.amountExpenseEditText);
         EditText expenseDate = (EditText) findViewById(R.id.expenceDateEditText);
         Button addExpanse = (Button) findViewById(R.id.addExpenceButton);
-        addExpenseView = new AddExpenseView(nameExpense, amontExpense, expenseDate, addExpanse, expenseAdditional);
+        addExpenseView = new AddExpenseView(nameExpense, amountExpense, expenseDate, addExpanse, expenseAdditional);
 
         expenseAdditional.addObserver(dailyBudgetView);
         expenseAdditional.addObserver(monthlyBudgetView);
