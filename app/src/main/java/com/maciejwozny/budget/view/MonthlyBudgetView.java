@@ -28,8 +28,11 @@ public class MonthlyBudgetView implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        monthlyBudgetText.setText("Monthly budget: " + monthlyBudget.getMonthlyBudget(BudgetActivity.BUDGET_NAME));
-        monthlySpends.setText("Monthly spends: " + monthlyBudget.getMonthlySpends(BudgetActivity.BUDGET_NAME));
-        remainingMonthlyBudget.setText("Remained: " + monthlyBudget.getMonthlyRemaining(BudgetActivity.BUDGET_NAME));
+        monthlyBudgetText.setText("Monthly budget: "
+                + monthlyBudget.getMonthlyBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
+        monthlySpends.setText("Monthly spends: "
+                + monthlyBudget.getMonthlySpends(BudgetActivity.DEFAULT_BUDGET.getName()));
+        remainingMonthlyBudget.setText("Remained: "
+                + monthlyBudget.getMonthlyRemaining(BudgetActivity.DEFAULT_BUDGET.getName()));
     }
 }

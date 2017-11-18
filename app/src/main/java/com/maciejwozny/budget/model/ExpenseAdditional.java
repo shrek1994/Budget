@@ -1,5 +1,6 @@
 package com.maciejwozny.budget.model;
 
+import com.maciejwozny.budget.BudgetActivity;
 import com.maciejwozny.budget.sql.IBudgetDatabase;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 
@@ -20,7 +21,9 @@ public class ExpenseAdditional extends Observable{
 
     public void addExpense(String name, int amount, String date)
     {
-        budgetDatabase.insertExpenditure(new Expenditure(name, amount, valueOf(date)));
+        Expenditure expenditure = new Expenditure(name, amount, valueOf(date));
+        expenditure.setBudgetId(budgetDatabase.getBudgetId(BudgetActivity.DEFAULT_BUDGET.getName()));
+        budgetDatabase.insertExpenditure(expenditure);
         notifyObservers();
     }
 }

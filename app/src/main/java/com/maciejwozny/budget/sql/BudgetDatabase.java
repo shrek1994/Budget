@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.maciejwozny.budget.BudgetActivity;
 import com.maciejwozny.budget.sql.tables.Budget;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 
@@ -22,6 +24,7 @@ import static com.maciejwozny.budget.sql.tables.Period.getPeriod;
  * Created by maciek on 30.01.16.
  */
 public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase {
+    private static final String TAG = BudgetDatabase.class.getSimpleName();
     private static final int version = 20171021;
 
     private static final String DATABASE_BUDGET_NAME = "Budget.db";
@@ -58,7 +61,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         db.execSQL(createBudgets);
         db.execSQL(createExpenses);
 
-        insertBudget(new Budget(BUDGET_NAME, 10, 1500), db);
+        insertBudget(BudgetActivity.DEFAULT_BUDGET, db);
     }
 
     @Override
@@ -74,6 +77,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         values.put(BUDGET_MONTHLY_BUDGET, budget.getMonthlyBudget());
         values.put(BUDGET_REPEATEDLY, budget.isRepeatedly());
         database.insert(TABLE_BUDGET_NAME, null, values);
+        Log.d(TAG, "Inserted: " + budget.toString());
     }
 
     @Override
@@ -84,6 +88,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
 
     @Override
     public Budget getBudget(String budgetName) {
+        Log.d(TAG, "Looking for: " + budgetName);
         String selection = Budget.BUDGET_NAME + " = ?";
         String[] selectionArgs = { budgetName };
         Cursor cursor = getWritableDatabase().query(
@@ -96,16 +101,20 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                 selection,
                 selectionArgs,
                 null, null, null);
-
+        Budget budget;
         if (cursor.moveToFirst()) {
             String name = cursor.getString(cursor.getColumnIndexOrThrow(BUDGET_NAME));
             int beginningDay = cursor.getInt(cursor.getColumnIndexOrThrow(BUDGET_BEGINNING_DAY));
             boolean isRepeatedly = cursor.getInt(cursor.getColumnIndexOrThrow(BUDGET_REPEATEDLY)) > 0;
             int period = cursor.getInt(cursor.getColumnIndexOrThrow(BUDGET_PERIOD));
             int monthlyBudget = cursor.getInt(cursor.getColumnIndexOrThrow(BUDGET_MONTHLY_BUDGET));
-            return new Budget(name, beginningDay, monthlyBudget, getPeriod(period), isRepeatedly);
+            budget = new Budget(name, beginningDay, monthlyBudget, getPeriod(period), isRepeatedly);
+            Log.d(TAG, "Found: " + budget.toString());
+            return budget;
         }
-        return new Budget("", 0, 0);
+        budget = new Budget("", 0, 0);
+        Log.i(TAG, "Not found: \'" + budgetName + "\', returning: " + budget.toString());
+        return budget;
     }
 
     @Override
@@ -132,6 +141,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                 budgets.add(new Budget(name, beginningDay, monthlyBudget, getPeriod(period), isRepeatedly));
             } while (cursor.moveToNext());
         }
+        Log.d(TAG, "All budgets: " + budgets);
         return budgets;
     }
 
@@ -163,6 +173,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         values.put(EXPENDITURE_AMOUNT, expenditure.getAmount());
         values.put(EXPENDITURE_DATE, expenditure.getDate().getTime());
         database.insert(TABLE_EXPENSES_NAME, null, values);
+        Log.d(TAG, "Inserted: " + expenditure.toString());
     }
 
     @Override
@@ -188,6 +199,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                 expenditures.add(new Expenditure(budgetId, name, amount, date));
             } while (cursor.moveToNext());
         }
+        Log.d(TAG, "All expenditures: " + expenditures);
         return expenditures;
     }
 }

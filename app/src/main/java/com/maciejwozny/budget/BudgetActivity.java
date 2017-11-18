@@ -16,6 +16,7 @@ import com.maciejwozny.budget.model.DailyBudget;
 import com.maciejwozny.budget.model.ExpenseAdditional;
 import com.maciejwozny.budget.model.MonthlyBudget;
 import com.maciejwozny.budget.sql.BudgetDatabase;
+import com.maciejwozny.budget.sql.tables.Budget;
 import com.maciejwozny.budget.view.AddExpenseView;
 import com.maciejwozny.budget.view.DailyBudgetView;
 import com.maciejwozny.budget.view.MonthlyBudgetView;
@@ -23,7 +24,7 @@ import com.maciejwozny.budget.view.MonthlyBudgetView;
 import java.util.Calendar;
 
 public class BudgetActivity extends AppCompatActivity {
-    public final static String BUDGET_NAME = "demo budget";
+    public final static Budget DEFAULT_BUDGET = new Budget("default budget", 10, 1500);
 
     private BudgetDatabase database = new BudgetDatabase(this);
     private DailyBudget dailyBudget = new DailyBudget(database, Calendar.getInstance());
@@ -53,7 +54,6 @@ public class BudgetActivity extends AppCompatActivity {
 //*********************************************************************************************//
         //TODO move to another class or method
 
-        database.getReadableDatabase();
         TextView todaysBudget = (TextView) findViewById(R.id.todaysBudgetTextView);
         TextView todaysRemainingBudget = (TextView) findViewById(R.id.todaysRemainingBudgetTextView);
         dailyBudgetView = new DailyBudgetView(todaysBudget, todaysRemainingBudget, dailyBudget);

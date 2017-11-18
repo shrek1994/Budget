@@ -7,7 +7,7 @@ package com.maciejwozny.budget.sql.tables;
 public class Budget {
     public static final String TABLE_BUDGET_NAME = "Budgets";
     public static final String BUDGET_ID = "BUDGET_ID";
-    public static final String BUDGET_NAME = "BUDGET_NAME";
+    public static final String BUDGET_NAME = "DEFAULT_BUDGET";
     public static final String BUDGET_BEGINNING_DAY = "BUDGET_BEGINNING_DAY";
     public static final String BUDGET_PERIOD = "BUDGET_PERIOD";
     public static final String BUDGET_REPEATEDLY = "BUDGET_REPEATEDLY";

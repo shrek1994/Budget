@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static com.maciejwozny.budget.BudgetActivity.DEFAULT_BUDGET;
 import static org.junit.Assert.*;
 
 /**
@@ -55,7 +56,7 @@ public class BudgetDatabaseTest {
 
     @Test
     public void shouldCorrectInsertBudgetIntoDatabase() {
-        List<Budget> expectedBudgets = new ArrayList<>(Arrays.asList(BUDGET));
+        List<Budget> expectedBudgets = new ArrayList<>(Arrays.asList(DEFAULT_BUDGET, BUDGET));
 
         sut.insertBudget(BUDGET);
 

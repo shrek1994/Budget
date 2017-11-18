@@ -26,7 +26,9 @@ public class DailyBudgetView implements Observer {
 
     @Override
     public void update(Observable o, Object obj) {
-        todayBudget.setText("Today's budget: " + dailyBudget.getDailyBudget(BudgetActivity.BUDGET_NAME));
-        remainingDailyBudget.setText("Today's remaining budget: " + dailyBudget.getDailyRemainingBudget(BudgetActivity.BUDGET_NAME));
+        todayBudget.setText("Today's budget: "
+                + dailyBudget.getDailyBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
+        remainingDailyBudget.setText("Today's remaining budget: "
+                + dailyBudget.getDailyRemainingBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
     }
 }
