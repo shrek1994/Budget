@@ -22,7 +22,7 @@ import com.maciejwozny.budget.view.DailyBudgetView;
 import com.maciejwozny.budget.view.MonthlyBudgetView;
 
 import java.util.Calendar;
-
+@
 public class BudgetActivity extends AppCompatActivity {
     public final static Budget DEFAULT_BUDGET = new Budget("default budget", 10, 1500);
 
