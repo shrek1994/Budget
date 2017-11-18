@@ -10,6 +10,7 @@ import com.maciejwozny.budget.model.ExpenseAdditional;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import static java.lang.String.valueOf;
@@ -35,6 +36,7 @@ public class AddExpenseView implements View.OnClickListener {
         this.expenseAdditional = expenseAdditional;
 
         this.addExpense.setOnClickListener(this);
+        updateLabel(myCalendar.getTime());
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -44,7 +46,7 @@ public class AddExpenseView implements View.OnClickListener {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+                updateLabel(myCalendar.getTime());
             }
 
         };
@@ -67,10 +69,10 @@ public class AddExpenseView implements View.OnClickListener {
     }
 
 
-    private void updateLabel() {
+    private void updateLabel(Date date) {
         String myFormat = "yyyy-MM-dd";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        expenseDate.setText(sdf.format(myCalendar.getTime()));
+        expenseDate.setText(sdf.format(date));
     }
 }
