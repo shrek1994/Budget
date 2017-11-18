@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dailyBudget" />
 
     <include
-        android:id="@+id/addExpence"
+        android:id="@+id/addExpense"
         layout="@layout/add_expence"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

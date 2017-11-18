@@ -20,6 +20,7 @@ import static com.maciejwozny.budget.sql.tables.Expense.*;
 /**
  * Created by maciek on 30.01.16.
  */
+@Deprecated
 public class DatabaseAdapter extends SQLiteOpenHelper {
     private static final int version = 20171021;
 

@@ -23,6 +23,7 @@ public class DailyBudget {
 
     public double getDailyBudget(String name) {
         Budget budget = budgetDatabase.getBudget(name);
+        if (budget == null) return 0;
         int monthlyBudget = budget.getMonthlyBudget();
         int beginningDay = budget.getBeginningDay();
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);

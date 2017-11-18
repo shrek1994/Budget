@@ -27,6 +27,7 @@ import static org.junit.Assert.*;
 @Config(constants = BuildConfig.class,
         sdk = LOLLIPOP,
         manifest = "src/main/AndroidManifest.xml")
+@Deprecated
 public class DatabaseAdapterTest {
     private DatabaseAdapter sut;
     private Budget budget = new Budget("bank", 10, 1000);

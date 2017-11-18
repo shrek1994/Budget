@@ -49,7 +49,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                     "REFERENCES " + TABLE_BUDGET_NAME + "( " + BUDGET_ID + " ) " +
                     ");";
 
-    BudgetDatabase(Context context){
+    public BudgetDatabase(Context context){
         super(context, DATABASE_BUDGET_NAME, null, version);
     }
 
@@ -57,6 +57,8 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(createBudgets);
         db.execSQL(createExpenses);
+
+        insertBudget(new Budget(BUDGET_NAME, 10, 1500), db);
     }
 
     @Override
@@ -64,9 +66,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
 
     }
 
-    @Override
-    public void insertBudget(Budget budget) {
-        SQLiteDatabase database = this.getWritableDatabase();
+    private void insertBudget(Budget budget, SQLiteDatabase database) {
         ContentValues values = new ContentValues();
         values.put(BUDGET_NAME, budget.getName());
         values.put(BUDGET_BEGINNING_DAY, budget.getBeginningDay());
@@ -74,6 +74,12 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         values.put(BUDGET_MONTHLY_BUDGET, budget.getMonthlyBudget());
         values.put(BUDGET_REPEATEDLY, budget.isRepeatedly());
         database.insert(TABLE_BUDGET_NAME, null, values);
+    }
+
+    @Override
+    public void insertBudget(Budget budget) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        insertBudget(budget, database);
     }
 
     @Override
@@ -99,7 +105,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
             int monthlyBudget = cursor.getInt(cursor.getColumnIndexOrThrow(BUDGET_MONTHLY_BUDGET));
             return new Budget(name, beginningDay, monthlyBudget, getPeriod(period), isRepeatedly);
         }
-        return null;
+        return new Budget("", 0, 0);
     }
 
     @Override
@@ -131,6 +137,9 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
 
     @Override
     public int getBudgetId(String budgetName) {
+        if (budgetName == null) {
+            return 0;
+        }
         String selection = Budget.BUDGET_NAME + " = ?";
         String[] selectionArgs = { budgetName };
         Cursor cursor = getWritableDatabase().query(

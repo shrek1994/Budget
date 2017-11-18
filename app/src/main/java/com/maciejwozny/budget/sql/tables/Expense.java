@@ -5,6 +5,7 @@ import java.sql.Date;
 /**
  * Created by maciek on 31.01.16.
  */
+@Deprecated
 public class Expense {
     public static final String tableExpensesName = "Expense";
     public static final String expenseId = "expenseId";

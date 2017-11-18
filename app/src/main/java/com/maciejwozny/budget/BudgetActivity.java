@@ -1,6 +1,5 @@
 package com.maciejwozny.budget;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,16 +8,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
+import com.maciejwozny.budget.model.DailyBudget;
+import com.maciejwozny.budget.model.ExpenseAdditional;
+import com.maciejwozny.budget.model.MonthlyBudget;
+import com.maciejwozny.budget.sql.BudgetDatabase;
+import com.maciejwozny.budget.view.AddExpenseView;
+import com.maciejwozny.budget.view.DailyBudgetView;
+import com.maciejwozny.budget.view.MonthlyBudgetView;
+
 import java.util.Calendar;
-import java.util.Locale;
 
 public class BudgetActivity extends AppCompatActivity {
-    Calendar myCalendar = Calendar.getInstance();
-    EditText expenseDate;
+    public final static String BUDGET_NAME = "demo budget";
+
+    private BudgetDatabase database = new BudgetDatabase(this);
+    private DailyBudget dailyBudget = new DailyBudget(database, Calendar.getInstance());
+    private MonthlyBudget monthlyBudget = new MonthlyBudget(database, Calendar.getInstance());
+    private ExpenseAdditional expenseAdditional = new ExpenseAdditional(database);
+
+    private DailyBudgetView dailyBudgetView;
+    private MonthlyBudgetView monthlyBudgetView;
+    private AddExpenseView addExpenseView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,39 +50,29 @@ public class BudgetActivity extends AppCompatActivity {
             }
         });
 
-        expenseDate = (EditText) findViewById(R.id.expenceDateEditText);
+//*********************************************************************************************//
+        //TODO move to another class or method
+
+        database.getReadableDatabase();
+        TextView todaysBudget = (TextView) findViewById(R.id.todaysBudgetTextView);
+        TextView todaysRemainingBudget = (TextView) findViewById(R.id.todaysRemainingBudgetTextView);
+        dailyBudgetView = new DailyBudgetView(todaysBudget, todaysRemainingBudget, dailyBudget);
+
+        TextView monthlyBudget = (TextView) findViewById(R.id.monthlyBudgetTextView);
+        TextView monthlySpends = (TextView) findViewById(R.id.monthlySpendsTextView);
+        TextView remainedMonthly = (TextView) findViewById(R.id.remainedMonthlyTextView);
+        monthlyBudgetView = new MonthlyBudgetView(monthlyBudget, monthlySpends, remainedMonthly, this.monthlyBudget);
+
+        EditText nameExpense = (EditText) findViewById(R.id.nameExpenseEditText);
+        EditText amontExpense = (EditText) findViewById(R.id.amontExpenseEditText);
+        EditText expenseDate = (EditText) findViewById(R.id.expenceDateEditText);
+        Button addExpanse = (Button) findViewById(R.id.addExpenceButton);
+        addExpenseView = new AddExpenseView(nameExpense, amontExpense, expenseDate, addExpanse, expenseAdditional);
+
+        expenseAdditional.addObserver(dailyBudgetView);
+        expenseAdditional.addObserver(monthlyBudgetView);
 
 //*********************************************************************************************//
-        //TODO extract to method or class
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-
-        };
-
-        expenseDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(BudgetActivity.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-//*********************************************************************************************//
-    }
-
-    private void updateLabel() {
-        String myFormat = "yyyy-MM-dd"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-        expenseDate.setText(sdf.format(myCalendar.getTime()));
     }
 
     @Override
