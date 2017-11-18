@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * Created by maciej on 21.10.17.
  */
-
 public class MonthlyBudget {
     private IBudgetDatabase budgetDatabase;
     private Calendar calendar;
@@ -26,7 +25,9 @@ public class MonthlyBudget {
     }
 
     double getMonthlySpends(String budgetName) {
-        Date firstDayOfPeriod = getFirstDayOfPeriod();
+        Budget budget = budgetDatabase.getBudget(budgetName);
+        int beginningDay = budget.getBeginningDay();
+        Date firstDayOfPeriod = getFirstDayOfPeriod(beginningDay);
         int amount = getAmount(budgetName, firstDayOfPeriod);
         return amount;
     }
@@ -45,10 +46,9 @@ public class MonthlyBudget {
         return amount;
     }
 
-    private Date getFirstDayOfPeriod() {
-        //TODO propably is wrong - don't added starting day
+    private Date getFirstDayOfPeriod(int beginningDay) {
         Calendar calendar = (Calendar) this.calendar.clone();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, beginningDay);
         Date firstDay = new Date(calendar.getTimeInMillis());
         return firstDay;
     }
