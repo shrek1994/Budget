@@ -7,4 +7,5 @@
     <string name="date">date:</string>
     <string name="add">Add</string>
     <string name="monthly_budget">Monthly budget:</string>
+    <string name="title_activity_ocr">OcrActivity</string>
 </resources>
