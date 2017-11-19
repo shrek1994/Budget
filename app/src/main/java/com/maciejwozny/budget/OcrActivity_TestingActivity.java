@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -95,8 +96,7 @@ public class OcrActivity_TestingActivity extends AppCompatActivity {
             float brightness = Float.parseFloat(brightnessEditText.getText().toString());
             float contrast = Float.parseFloat(contrastEditText.getText().toString());
 
-            img = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            img = Bitmap.createScaledBitmap(img, 2000, 1125, false);
+            img = loadImg(mCurrentPhotoPath);
             img = BillReader.changeBitmapContrastBrightness(img, contrast, brightness);
 
             ocr.setVisibility(View.INVISIBLE);
@@ -206,12 +206,35 @@ public class OcrActivity_TestingActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
 
             Log.d(TAG, "photo path: " + mCurrentPhotoPath);
-            img = BitmapFactory.decodeFile(mCurrentPhotoPath);
 
             ocr.setVisibility(View.INVISIBLE);
             imgView.setVisibility(View.VISIBLE);
-            imgView.setImageBitmap(img);
+            imgView.setImageBitmap(loadImg(mCurrentPhotoPath));
         }
+    }
+
+    private Bitmap loadImg(String filename) {
+        img = BitmapFactory.decodeFile(filename);
+        try {
+            ExifInterface exif = new ExifInterface(filename);
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+            switch (orientation) {
+                case 3:
+                    img = rotateBitmap(img, 180);
+                    break;
+                case 6:
+                    img = rotateBitmap(img, 90);
+                    break;
+                case 8:
+                    img = rotateBitmap(img, -90);
+                    break;
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return img;
     }
 
 }
