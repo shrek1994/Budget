@@ -27,6 +27,7 @@ import java.util.Calendar;
 public class BudgetActivity extends AppCompatActivity {
     private static final String TAG = BudgetActivity.class.getSimpleName();
     public final static Budget DEFAULT_BUDGET = new Budget("default budget", 10, 1500);
+//    public static final String EXTRA_DATABASE = "EXTRA_DATABASE";
 
     private BudgetDatabase database = new BudgetDatabase(this);
     private DailyBudget dailyBudget = new DailyBudget(database, Calendar.getInstance());
@@ -88,10 +89,13 @@ public class BudgetActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_ocr:
-                Intent intent = new Intent(BudgetActivity.this, OcrActivity_TestingActivity.class);
+                startActivity(new Intent(this, OcrActivity_TestingActivity.class));
+                return true;
+            case R.id.expense_list:
+                Intent intent = new Intent(this, ExpenseListActivity.class);
+//                intent.putExtra(EXTRA_DATABASE, database);
                 startActivity(intent);
                 return true;
             case R.id.action_settings:

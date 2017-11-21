@@ -1,6 +1,6 @@
 package com.maciejwozny.budget.sql.tables;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by maciek on 31.01.16.

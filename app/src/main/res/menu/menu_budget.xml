@@ -8,6 +8,11 @@
         android:title="Ocr (Alpha Testing)"
         app:showAsAction="never" />
     <item
+        android:id="@+id/expense_list"
+        android:orderInCategory="200"
+        android:title="Expense list"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="200"
         android:title="@string/action_settings"
