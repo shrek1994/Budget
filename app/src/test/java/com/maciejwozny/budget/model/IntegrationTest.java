@@ -73,7 +73,6 @@ public class IntegrationTest {
 
 
     @Test
-    @Ignore
     public void shouldCorrectShowsBudgetsInNextMonthButInTheSamePeriod() {
         sut.expenseAdditional.addExpense("name", 1000, FIRST_DAY_OF_PERIOD_STRING);
 
@@ -83,7 +82,7 @@ public class IntegrationTest {
         assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(DEFAULT_BUDGET.getName()), 0.001);
         assertEquals(500, sut.monthlyBudget.getMonthlyRemaining(DEFAULT_BUDGET.getName()), 0.001);
 
-        assertEquals(50, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
-        assertEquals(50, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(55, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(55, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
     }
 }
