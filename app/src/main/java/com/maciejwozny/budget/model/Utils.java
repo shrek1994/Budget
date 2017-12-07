@@ -3,7 +3,7 @@ package com.maciejwozny.budget.model;
 import com.maciejwozny.budget.sql.IBudgetDatabase;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * 2017 All rights reserved.
  */
 
-public class Utils {
+class Utils {
     static int getAmount(IBudgetDatabase budgetDatabase, String name, Date fromDate) {
         int amount = 0;
         int budgetId = budgetDatabase.getBudgetId(name);

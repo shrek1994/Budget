@@ -67,8 +67,8 @@ public class DailyBudgetTest {
 
         setToday(TODAY);
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
-                .thenReturn(Arrays.asList(new Expenditure("", 25, TODAY),
-                                          new Expenditure("", 50, TODAY)));
+                .thenReturn(Arrays.asList(new Expenditure("", 25, FIRST_DAY_OF_PERIOD),
+                                          new Expenditure("", 50, FIRST_DAY_OF_PERIOD)));
 
         assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
     }
@@ -76,8 +76,8 @@ public class DailyBudgetTest {
 
     @Test
     public void shouldCorrectCalculateRemainingBudgetWithExpenditures() {
-        double expectedDailyBudget = 35.00;
-        double expectedRemainingBudget = 10.00;
+        double expectedDailyBudget = 36.00;
+        double expectedRemainingBudget = 11.00;
 
         setToday(TODAY);
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))

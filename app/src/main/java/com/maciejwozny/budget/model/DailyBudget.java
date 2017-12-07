@@ -2,11 +2,9 @@ package com.maciejwozny.budget.model;
 
 import com.maciejwozny.budget.sql.IBudgetDatabase;
 import com.maciejwozny.budget.sql.tables.Budget;
-import com.maciejwozny.budget.sql.tables.Expenditure;
 
-import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by maciej on 21.10.17.
@@ -30,8 +28,9 @@ public class DailyBudget {
         int daysLeft = daysInMonth - today + beginningDay;
         Date firstDayOfPeriod = Utils.getFirstDayOfPeriod(calendar, beginningDay);
         int amount = Utils.getAmount(budgetDatabase, name, firstDayOfPeriod);
+        int todaySpends = Utils.getAmount(budgetDatabase, name, calendar.getTime());
 
-        return (monthlyBudget - amount) / daysLeft;
+        return (monthlyBudget - amount + todaySpends) / daysLeft;
     }
 
     public double getDailyRemainingBudget(String name) {

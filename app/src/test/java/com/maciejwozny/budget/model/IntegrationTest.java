@@ -67,11 +67,8 @@ public class IntegrationTest {
         assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(DEFAULT_BUDGET.getName()), 0.001);
         assertEquals(1450, sut.monthlyBudget.getMonthlyRemaining(DEFAULT_BUDGET.getName()), 0.001);
 
-        // TODO repair it !
-        //should be 50
-        assertEquals(48, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
-        //should be 0
-        assertEquals(-2, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(50, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(0, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
     }
 
 
@@ -87,6 +84,6 @@ public class IntegrationTest {
         assertEquals(500, sut.monthlyBudget.getMonthlyRemaining(DEFAULT_BUDGET.getName()), 0.001);
 
         assertEquals(50, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
-        assertEquals(0, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(50, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
     }
 }

@@ -2,11 +2,9 @@ package com.maciejwozny.budget.model;
 
 import com.maciejwozny.budget.sql.IBudgetDatabase;
 import com.maciejwozny.budget.sql.tables.Budget;
-import com.maciejwozny.budget.sql.tables.Expenditure;
 
-import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by maciej on 21.10.17.
