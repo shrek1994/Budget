@@ -48,6 +48,9 @@ public class MonthlyBudget {
 
     private Date getFirstDayOfPeriod(int beginningDay) {
         Calendar calendar = (Calendar) this.calendar.clone();
+        if (calendar.get(Calendar.DAY_OF_MONTH) < beginningDay) {
+            calendar.add(Calendar.MONTH, -1);
+        }
         calendar.set(Calendar.DAY_OF_MONTH, beginningDay);
         Date firstDay = new Date(calendar.getTimeInMillis());
         return firstDay;

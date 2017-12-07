@@ -87,6 +87,7 @@ public class DailyBudgetTest {
         when(budgetDatabase.getExpenditures(BUDGET_ID, TODAY))
                 .thenReturn(Arrays.asList(new Expenditure("", 25, TODAY)));
 
+        assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
         assertEquals(expectedRemainingBudget, sut.getDailyRemainingBudget(BUDGET.getName()), 0.001);
     }
 }

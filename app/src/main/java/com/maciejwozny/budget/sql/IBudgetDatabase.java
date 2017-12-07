@@ -3,7 +3,6 @@ package com.maciejwozny.budget.sql;
 import com.maciejwozny.budget.sql.tables.Budget;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 

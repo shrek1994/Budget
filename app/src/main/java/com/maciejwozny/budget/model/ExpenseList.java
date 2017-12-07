@@ -13,7 +13,7 @@ import java.util.Observable;
  */
 
 public class ExpenseList extends Observable {
-    IBudgetDatabase database;
+    private IBudgetDatabase database;
 
     public ExpenseList(IBudgetDatabase database) {
         this.database = database;
