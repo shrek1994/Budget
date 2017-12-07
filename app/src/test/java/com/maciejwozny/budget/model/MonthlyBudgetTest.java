@@ -25,8 +25,6 @@ import static org.mockito.Mockito.when;
 public class MonthlyBudgetTest {
     private static final int MONTHLY_BUDGET = 1000;
     private static final int BEGINNING_DAY = 1;
-    private static final int DAYS_OF_MONTH = 30;
-    private static final int DAY_OF_MONTH = 6;
     private static final Budget BUDGET = new Budget("name", BEGINNING_DAY, MONTHLY_BUDGET);
     private static final int BUDGET_ID = 123;
     private static final Date FIRST_DAY_OF_PERIOD = valueOf("2000-04-01");
@@ -35,19 +33,18 @@ public class MonthlyBudgetTest {
     private MonthlyBudget sut;
 
     @Mock private IBudgetDatabase budgetDatabase;
-    @Mock private Calendar calendar;
-    @Mock private Calendar firstDayOfPeriodCalendar;
+    private Calendar calendar = Calendar.getInstance();
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+    private void setToday(java.util.Date today) {
+        calendar.setTime(today);
+    }
 
     @Before
     public void setup() {
         sut = new MonthlyBudget(budgetDatabase, calendar);
-        when(calendar.get(Calendar.DAY_OF_MONTH)).thenReturn(DAY_OF_MONTH);
-        when(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)).thenReturn(DAYS_OF_MONTH);
-        when(calendar.clone()).thenReturn(firstDayOfPeriodCalendar);
-        when(calendar.getTimeInMillis()).thenReturn(TODAY.getTime());
-        when(firstDayOfPeriodCalendar.getTimeInMillis()).thenReturn(FIRST_DAY_OF_PERIOD.getTime());
+        setToday(TODAY);
         when(budgetDatabase.getBudgetId(BUDGET.getName())).thenReturn(BUDGET_ID);
         when(budgetDatabase.getBudget(BUDGET.getName())).thenReturn(BUDGET);
     }

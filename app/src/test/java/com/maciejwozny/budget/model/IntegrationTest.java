@@ -7,10 +7,8 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -22,8 +20,6 @@ import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static com.maciejwozny.budget.BudgetActivity.DEFAULT_BUDGET;
 import static java.sql.Date.valueOf;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Maciej Wozny on 07.12.17.
@@ -50,7 +46,7 @@ public class IntegrationTest {
         sut = Budget.build(RuntimeEnvironment.application, calendar);
     }
 
-    public void setToday(Date today) {
+    private void setToday(Date today) {
         calendar.setTime(today);
     }
 
