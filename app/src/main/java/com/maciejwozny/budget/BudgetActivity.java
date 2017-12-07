@@ -70,8 +70,8 @@ public class BudgetActivity extends AppCompatActivity {
 
         EditText nameExpense = (EditText) findViewById(R.id.nameExpenseEditText);
         EditText amountExpense = (EditText) findViewById(R.id.amountExpenseEditText);
-        EditText expenseDate = (EditText) findViewById(R.id.expenceDateEditText);
-        Button addExpanse = (Button) findViewById(R.id.addExpenceButton);
+        EditText expenseDate = (EditText) findViewById(R.id.expenseDateEditText);
+        Button addExpanse = (Button) findViewById(R.id.addExpenseButton);
         addExpenseView = new AddExpenseView(nameExpense, amountExpense, expenseDate, addExpanse, expenseAdditional);
 
         expenseAdditional.addObserver(dailyBudgetView);
