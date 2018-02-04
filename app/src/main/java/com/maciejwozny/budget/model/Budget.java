@@ -16,15 +16,19 @@ public class Budget {
     public MonthlyBudget monthlyBudget;
     public ExpenseAdditional expenseAdditional;
 
-    private Budget(Context context) {
+    private Budget(Context context, Calendar calendar) {
         database = new BudgetDatabase(context);
-        dailyBudget = new DailyBudget(database, Calendar.getInstance());
-        monthlyBudget = new MonthlyBudget(database, Calendar.getInstance());
+        dailyBudget = new DailyBudget(database, calendar);
+        monthlyBudget = new MonthlyBudget(database, calendar);
         expenseAdditional = new ExpenseAdditional(database);
     }
 
     public static Budget build(Context context) {
-        return new Budget(context);
+        return new Budget(context, Calendar.getInstance());
+    }
+
+    public static Budget build(Context context, Calendar calendar) {
+        return new Budget(context, calendar);
     }
 
 

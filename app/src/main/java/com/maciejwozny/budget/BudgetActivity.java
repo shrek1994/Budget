@@ -1,5 +1,6 @@
 package com.maciejwozny.budget;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,7 +25,9 @@ import com.maciejwozny.budget.view.MonthlyBudgetView;
 import java.util.Calendar;
 
 public class BudgetActivity extends AppCompatActivity {
+    private static final String TAG = BudgetActivity.class.getSimpleName();
     public final static Budget DEFAULT_BUDGET = new Budget("default budget", 10, 1500);
+//    public static final String EXTRA_DATABASE = "EXTRA_DATABASE";
 
     private BudgetDatabase database = new BudgetDatabase(this);
     private DailyBudget dailyBudget = new DailyBudget(database, Calendar.getInstance());
@@ -66,10 +69,10 @@ public class BudgetActivity extends AppCompatActivity {
         monthlyBudgetView = new MonthlyBudgetView(monthlyBudget, monthlySpends, remainedMonthly, this.monthlyBudget);
 
         EditText nameExpense = (EditText) findViewById(R.id.nameExpenseEditText);
-        EditText amontExpense = (EditText) findViewById(R.id.amontExpenseEditText);
-        EditText expenseDate = (EditText) findViewById(R.id.expenceDateEditText);
-        Button addExpanse = (Button) findViewById(R.id.addExpenceButton);
-        addExpenseView = new AddExpenseView(nameExpense, amontExpense, expenseDate, addExpanse, expenseAdditional);
+        EditText amountExpense = (EditText) findViewById(R.id.amountExpenseEditText);
+        EditText expenseDate = (EditText) findViewById(R.id.expenseDateEditText);
+        Button addExpanse = (Button) findViewById(R.id.addExpenseButton);
+        addExpenseView = new AddExpenseView(nameExpense, amountExpense, expenseDate, addExpanse, expenseAdditional);
 
         expenseAdditional.addObserver(dailyBudgetView);
         expenseAdditional.addObserver(monthlyBudgetView);
@@ -86,16 +89,19 @@ public class BudgetActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_ocr:
+                startActivity(new Intent(this, OcrActivity_TestingActivity.class));
+                return true;
+            case R.id.expense_list:
+                Intent intent = new Intent(this, ExpenseListActivity.class);
+//                intent.putExtra(EXTRA_DATABASE, database);
+                startActivity(intent);
+                return true;
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

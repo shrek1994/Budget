@@ -1,16 +1,14 @@
 package com.maciejwozny.budget.model;
 
 import com.maciejwozny.budget.sql.IBudgetDatabase;
-import com.maciejwozny.budget.sql.tables.Expenditure;
+import com.maciejwozny.budget.sql.tables.Budget;
 
-import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by maciej on 21.10.17.
  */
-
 public class MonthlyBudget {
     private IBudgetDatabase budgetDatabase;
     private Calendar calendar;
@@ -25,31 +23,14 @@ public class MonthlyBudget {
     }
 
     public double getMonthlySpends(String budgetName) {
-        Date firstDayOfPeriod = getFirstDayOfPeriod();
-        int amount = getAmount(budgetName, firstDayOfPeriod);
+        Budget budget = budgetDatabase.getBudget(budgetName);
+        int beginningDay = budget.getBeginningDay();
+        Date firstDayOfPeriod = Utils.getFirstDayOfPeriod(calendar, beginningDay);
+        int amount = Utils.getAmount(budgetDatabase, budgetName, firstDayOfPeriod);
         return amount;
     }
 
     public double getMonthlyRemaining(String budgetName) {
         return getMonthlyBudget(budgetName) - getMonthlySpends(budgetName);
     }
-
-
-    private int getAmount(String name, Date fromDate) {
-        int amount = 0;
-        int budgetId = budgetDatabase.getBudgetId(name);
-        List<Expenditure> expenditures = budgetDatabase.getExpenditures(budgetId, fromDate);
-        for (Expenditure expenditure: expenditures)
-            amount += expenditure.getAmount();
-        return amount;
-    }
-
-    private Date getFirstDayOfPeriod() {
-        //TODO propably is wrong - don't added starting day
-        Calendar calendar = (Calendar) this.calendar.clone();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        Date firstDay = new Date(calendar.getTimeInMillis());
-        return firstDay;
-    }
-
 }

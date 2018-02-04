@@ -32,8 +32,9 @@ import static org.junit.Assert.*;
         sdk = LOLLIPOP,
         manifest = "src/main/AndroidManifest.xml")
 public class BudgetDatabaseTest {
-    private final Budget BUDGET = new Budget("name", 1, 1000);
     private final int BUDGET_ID = 123;
+    private final Budget BUDGET = new Budget("name", 1, 1000);
+    private final Expenditure EXPENSE = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-01"));
 
     private BudgetDatabase sut;
     private SQLiteDatabase database;
@@ -81,10 +82,9 @@ public class BudgetDatabaseTest {
 
     @Test
     public void shouldCorrectInsertExpensesIntoDatabase() {
-        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-05"));
-        List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(expenditure));
+        List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(EXPENSE));
 
-        sut.insertExpenditure(expenditure);
+        sut.insertExpenditure(EXPENSE);
 
         assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
     }
@@ -92,9 +92,7 @@ public class BudgetDatabaseTest {
 
     @Test
     public void shouldNotGetExpensesBeforeDate() {
-        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-01"));
-
-        sut.insertExpenditure(expenditure);
+        sut.insertExpenditure(EXPENSE);
 
         assertEquals(new ArrayList<Expenditure>(),
                 sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-05")));
@@ -102,11 +100,19 @@ public class BudgetDatabaseTest {
 
     @Test
     public void shouldGetExpensesFromTheSameDay() {
-        Expenditure expenditure = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-01"));
-        List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(expenditure));
+        List<Expenditure> expectedExpenditures = new ArrayList<>(Collections.singletonList(EXPENSE));
 
-        sut.insertExpenditure(expenditure);
+        sut.insertExpenditure(EXPENSE);
 
         assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+    }
+
+    @Test
+    public void shouldRemoveExpensesCorrectly() {
+        sut.insertExpenditure(EXPENSE);
+        sut.removeExpense(EXPENSE);
+
+        assertEquals(new ArrayList<Expenditure>(),
+                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
     }
 }

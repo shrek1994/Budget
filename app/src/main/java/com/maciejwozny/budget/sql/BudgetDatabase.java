@@ -11,7 +11,7 @@ import com.maciejwozny.budget.BudgetActivity;
 import com.maciejwozny.budget.sql.tables.Budget;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,6 +184,17 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         values.put(EXPENDITURE_DATE, expenditure.getDate().getTime());
         database.insert(TABLE_EXPENSES_NAME, null, values);
         Log.d(TAG, "Inserted: " + expenditure.toString());
+    }
+
+    @Override
+    public void removeExpense(Expenditure expenditure) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String whereClause = EXPENDITURE_NAME + "=? and " + EXPENDITURE_AMOUNT + "=? and "
+                + EXPENDITURE_DATE + "=?";
+        String[] whereArgs = new String[] { expenditure.getName(),
+                Integer.toString(expenditure.getAmount()),
+                Long.toString(expenditure.getDate().getTime()) };
+        database.delete(TABLE_EXPENSES_NAME, whereClause, whereArgs);
     }
 
     @Override

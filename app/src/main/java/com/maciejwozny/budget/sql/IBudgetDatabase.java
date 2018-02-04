@@ -3,7 +3,7 @@ package com.maciejwozny.budget.sql;
 import com.maciejwozny.budget.sql.tables.Budget;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,5 +17,6 @@ public interface IBudgetDatabase {
     int getBudgetId(String budgetName);
 
     void insertExpenditure(Expenditure expenditure);
+    void removeExpense(Expenditure expenditure);
     List<Expenditure> getExpenditures(int budgetId, Date fromDate);
 }
