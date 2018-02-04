@@ -29,8 +29,9 @@ public class MonthlyBudgetTest {
     private static final int DAY_OF_MONTH = 6;
     private static final Budget BUDGET = new Budget("name", BEGINNING_DAY, MONTHLY_BUDGET);
     private static final int BUDGET_ID = 123;
-    private static final Date FIRST_DAY_OF_PERIOD = valueOf("2000-04-01");
-    private static final Date TODAY = valueOf("2000-04-06");
+    private static final Date FIRST_DAY_OF_PERIOD = valueOf("2000-04-10");
+    private static final Date MIDDLE_OF_THE_PERIOD = valueOf("2000-04-25");
+    private static final Date NEXT_MONTH_SAME_PERIOD = valueOf("2000-05-03");
 
     private MonthlyBudget sut;
 
@@ -46,7 +47,7 @@ public class MonthlyBudgetTest {
         when(calendar.get(Calendar.DAY_OF_MONTH)).thenReturn(DAY_OF_MONTH);
         when(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)).thenReturn(DAYS_OF_MONTH);
         when(calendar.clone()).thenReturn(firstDayOfPeriodCalendar);
-        when(calendar.getTimeInMillis()).thenReturn(TODAY.getTime());
+        when(calendar.getTimeInMillis()).thenReturn(MIDDLE_OF_THE_PERIOD.getTime());
         when(firstDayOfPeriodCalendar.getTimeInMillis()).thenReturn(FIRST_DAY_OF_PERIOD.getTime());
         when(budgetDatabase.getBudgetId(BUDGET.getName())).thenReturn(BUDGET_ID);
         when(budgetDatabase.getBudget(BUDGET.getName())).thenReturn(BUDGET);
@@ -63,7 +64,7 @@ public class MonthlyBudgetTest {
         double amount = 50;
 
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
-                .thenReturn(Arrays.asList(new Expenditure("name", (int)amount, TODAY)));
+                .thenReturn(Arrays.asList(new Expenditure("name", (int)amount, MIDDLE_OF_THE_PERIOD)));
 
         assertEquals(amount, sut.getMonthlySpends(BUDGET.getName()), 0.001);
     }
@@ -72,9 +73,28 @@ public class MonthlyBudgetTest {
     @Test
     public void shouldCorrectReturnMonthlyRemaining() {
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
-                .thenReturn(Arrays.asList(new Expenditure("name", 50, TODAY)));
+                .thenReturn(Arrays.asList(new Expenditure("name", 50, MIDDLE_OF_THE_PERIOD)));
 
         assertEquals(950.0, sut.getMonthlyRemaining(BUDGET.getName()), 0.001);
+    }
+
+    @Test
+    public void shouldCorrectCalculateMonthlySpendsInNextMonthButInTheSamePeriod() {
+
+        when(calendar.get(Calendar.DAY_OF_MONTH)).thenReturn(3);
+        when(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)).thenReturn(31);
+        when(calendar.clone()).thenReturn(firstDayOfPeriodCalendar);
+        when(calendar.getTimeInMillis()).thenReturn(NEXT_MONTH_SAME_PERIOD.getTime());
+        when(firstDayOfPeriodCalendar.getTimeInMillis()).thenReturn(FIRST_DAY_OF_PERIOD.getTime());
+        when(budgetDatabase.getBudgetId(BUDGET.getName())).thenReturn(BUDGET_ID);
+        when(budgetDatabase.getBudget(BUDGET.getName())).thenReturn(BUDGET);
+
+        when(budgetDatabase.getExpenditures(BUDGET_ID, NEXT_MONTH_SAME_PERIOD))
+                .thenReturn(Arrays.asList(new Expenditure("name", 50, MIDDLE_OF_THE_PERIOD),
+                        new Expenditure("name", 50, NEXT_MONTH_SAME_PERIOD)));
+
+        assertEquals(100.0, sut.getMonthlySpends(BUDGET.getName()), 0.001);
+
     }
 
 }
