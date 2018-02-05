@@ -7,9 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by maciej on 21.10.17.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
-
 public interface IBudgetDatabase {
     void insertBudget(Budget budget);
     Budget getBudget(String budgetName);

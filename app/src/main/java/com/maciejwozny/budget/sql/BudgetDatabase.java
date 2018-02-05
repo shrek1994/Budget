@@ -21,7 +21,8 @@ import static com.maciejwozny.budget.sql.tables.Expenditure.*;
 import static com.maciejwozny.budget.sql.tables.Period.getPeriod;
 
 /**
- * Created by maciek on 30.01.16.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
 public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase {
     private static final String TAG = BudgetDatabase.class.getSimpleName();

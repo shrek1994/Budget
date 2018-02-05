@@ -20,7 +20,10 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
+ */
 public class ExpenseListActivity extends AppCompatActivity {
     ExpenseList expenseList;
 

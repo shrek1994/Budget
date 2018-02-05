@@ -21,8 +21,8 @@ import static java.sql.Date.valueOf;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Maciej Wozny on 07.12.17.
- * 2017 All rights reserved.
+ * Created by Maciej Wozny on 07.12.2017.
+ * 2017-2018 All rights reserved.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class,
@@ -83,5 +83,19 @@ public class IntegrationTest {
 
         assertEquals(55, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
         assertEquals(55, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
+    }
+
+//    @Test
+    public void shouldCorrectShowsBudgetsThenNumbersAreFloat() {
+        setToday(FIRST_DAY_OF_PERIOD);
+
+//        sut.expenseAdditional.addExpense("name", 99.99, FIRST_DAY_OF_PERIOD_STRING);
+
+        assertEquals(99.99, sut.monthlyBudget.getMonthlySpends(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(401, sut.monthlyBudget.getMonthlyRemaining(DEFAULT_BUDGET.getName()), 0.001);
+
+        assertEquals(50, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(-49.99, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
     }
 }

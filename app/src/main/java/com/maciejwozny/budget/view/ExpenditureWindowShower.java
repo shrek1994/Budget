@@ -10,9 +10,9 @@ import android.widget.PopupWindow;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /**
- * Created by maciej on 22.10.17.
+ * Created by Maciej Wozny on 22.10.2017.
+ * 2017 All rights reserved.
  */
-
 public class ExpenditureWindowShower implements View.OnClickListener {
     PopupWindow mPopupWindow;
 

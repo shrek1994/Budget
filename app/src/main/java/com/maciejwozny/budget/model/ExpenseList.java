@@ -11,7 +11,6 @@ import java.util.Observable;
  * Created by Maciej Wozny on 20.11.17.
  * 2017 All rights reserved.
  */
-
 public class ExpenseList extends Observable {
     private IBudgetDatabase database;
 

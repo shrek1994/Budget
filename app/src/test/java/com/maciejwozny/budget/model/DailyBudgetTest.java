@@ -21,7 +21,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by maciej on 21.10.17.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
 public class DailyBudgetTest {
     private static final int MONTHLY_BUDGET = 1000;
@@ -94,9 +95,6 @@ public class DailyBudgetTest {
 
     @Test
     public void shouldCorrectCalculateInNextMonthButInSamePeriod() {
-        double expectedDailyBudget = 50.00;
-        double expectedRemainingBudget = 50.00;
-
         setToday(FIRST_DAY_OF_NEXT_MONTH);
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
                 .thenReturn(Arrays.asList(
@@ -105,7 +103,7 @@ public class DailyBudgetTest {
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_NEXT_MONTH))
                 .thenReturn(new ArrayList<Expenditure>());
 
-        assertEquals(expectedDailyBudget, sut.getDailyBudget(BUDGET.getName()), 0.001);
-        assertEquals(expectedRemainingBudget, sut.getDailyRemainingBudget(BUDGET.getName()), 0.001);
+        assertEquals(50, sut.getDailyBudget(BUDGET.getName()), 0.001);
+        assertEquals(50, sut.getDailyRemainingBudget(BUDGET.getName()), 0.001);
     }
 }

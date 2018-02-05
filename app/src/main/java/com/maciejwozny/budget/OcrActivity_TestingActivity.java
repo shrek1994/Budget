@@ -35,6 +35,10 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
+ */
 public class OcrActivity_TestingActivity extends AppCompatActivity {
     private static final String TAG = OcrActivity_TestingActivity.class.getSimpleName();
     private static final int REQUEST_TAKE_PHOTO = 1;

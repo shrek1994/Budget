@@ -25,7 +25,8 @@ import static com.maciejwozny.budget.BudgetActivity.DEFAULT_BUDGET;
 import static org.junit.Assert.*;
 
 /**
- * Created by maciek on 21.10.17.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class,

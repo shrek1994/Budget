@@ -20,7 +20,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by maciej on 21.10.17.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
 public class MonthlyBudgetTest {
     private static final int MONTHLY_BUDGET = 1000;

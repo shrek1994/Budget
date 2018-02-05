@@ -10,9 +10,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Created by maciej on 21.10.17.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
-
 public class DailyBudgetView implements Observer {
     private static final String TAG = DailyBudgetView.class.getSimpleName();
     private TextView todayBudget;

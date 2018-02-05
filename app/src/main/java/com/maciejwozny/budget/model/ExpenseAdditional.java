@@ -11,9 +11,9 @@ import java.util.Observable;
 import static java.sql.Date.valueOf;
 
 /**
- * Created by maciek on 18.11.17.
+ * Created by Maciej Wozny on 18.11.2017.
+ * 2017 All rights reserved.
  */
-
 public class ExpenseAdditional extends Observable {
     private static final String TAG = ExpenseAdditional.class.getSimpleName();
     private IBudgetDatabase budgetDatabase;

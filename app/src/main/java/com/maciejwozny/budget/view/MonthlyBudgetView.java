@@ -12,9 +12,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Created by maciek on 18.11.17.
+ * Created by Maciej Wozny on 18.11.2017.
+ * 2017 All rights reserved.
  */
-
 public class MonthlyBudgetView implements Observer {
     private static final String TAG = MonthlyBudgetView.class.getSimpleName();
     private TextView monthlyBudgetText;

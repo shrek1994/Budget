@@ -24,6 +24,10 @@ import com.maciejwozny.budget.view.MonthlyBudgetView;
 
 import java.util.Calendar;
 
+/**
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
+ */
 public class BudgetActivity extends AppCompatActivity {
     private static final String TAG = BudgetActivity.class.getSimpleName();
     public final static Budget DEFAULT_BUDGET = new Budget("default budget", 10, 1500);

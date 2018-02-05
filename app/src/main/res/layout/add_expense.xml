@@ -51,7 +51,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="numberSigned|numberDecimal"
+        android:inputType="number"
+        android:singleLine="true"
         android:text=""
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameExpenseEditText" />

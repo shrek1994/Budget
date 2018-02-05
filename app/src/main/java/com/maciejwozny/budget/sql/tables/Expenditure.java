@@ -3,7 +3,8 @@ package com.maciejwozny.budget.sql.tables;
 import java.util.Date;
 
 /**
- * Created by maciek on 31.01.16.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
 public class Expenditure {
     public static final String TABLE_EXPENSES_NAME = "Expenditure";

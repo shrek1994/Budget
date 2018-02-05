@@ -11,7 +11,6 @@ import java.util.List;
  * Created by Maciej Wozny on 07.12.17.
  * 2017 All rights reserved.
  */
-
 class Utils {
     static int getAmount(IBudgetDatabase budgetDatabase, String name, Date fromDate) {
         int amount = 0;

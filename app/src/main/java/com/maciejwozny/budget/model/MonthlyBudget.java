@@ -7,7 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by maciej on 21.10.17.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
 public class MonthlyBudget {
     private IBudgetDatabase budgetDatabase;

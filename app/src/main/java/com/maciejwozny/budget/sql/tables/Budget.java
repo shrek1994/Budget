@@ -2,7 +2,8 @@ package com.maciejwozny.budget.sql.tables;
 
 
 /**
- * Created by maciek on 31.01.16.
+ * Created by Maciej Wozny on 21.10.2017.
+ * 2017 All rights reserved.
  */
 public class Budget {
     public static final String TABLE_BUDGET_NAME = "Budgets";

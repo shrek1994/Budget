@@ -7,9 +7,9 @@ import com.maciejwozny.budget.sql.BudgetDatabase;
 import java.util.Calendar;
 
 /**
- * Created by maciek on 18.11.17.
+ * Created by Maciej Wozny on 18.11.2017.
+ * 2017 All rights reserved.
  */
-
 public class Budget {
     public BudgetDatabase database;
     public DailyBudget dailyBudget;

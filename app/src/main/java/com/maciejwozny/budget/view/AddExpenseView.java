@@ -16,9 +16,9 @@ import java.util.Locale;
 import static java.lang.String.valueOf;
 
 /**
- * Created by maciek on 18.11.17.
+ * Created by Maciej Wozny on 18.11.2017.
+ * 2017-2018 All rights reserved.
  */
-
 public class AddExpenseView implements View.OnClickListener {
     private static final String TAG = AddExpenseView.class.getSimpleName();
     Calendar myCalendar = Calendar.getInstance();
@@ -28,7 +28,11 @@ public class AddExpenseView implements View.OnClickListener {
     private Button addExpense;
     private ExpenseAdditional expenseAdditional;
 
-    public AddExpenseView(final EditText expenseName, EditText expenseAmount, final EditText expenseDate, Button addExpense, ExpenseAdditional expenseAdditional) {
+    public AddExpenseView(final EditText expenseName,
+                          EditText expenseAmount,
+                          final EditText expenseDate,
+                          Button addExpense,
+                          ExpenseAdditional expenseAdditional) {
         this.expenseName = expenseName;
         this.expenseAmount = expenseAmount;
         this.expenseDate = expenseDate;
