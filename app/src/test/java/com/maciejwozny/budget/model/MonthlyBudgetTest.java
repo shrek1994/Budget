@@ -24,13 +24,13 @@ import static org.mockito.Mockito.when;
  */
 public class MonthlyBudgetTest {
     private static final int MONTHLY_BUDGET = 1000;
-    private static final int BEGINNING_DAY = 1;
+    private static final int BEGINNING_DAY = 10;
     private static final Budget BUDGET = new Budget("name", BEGINNING_DAY, MONTHLY_BUDGET);
     private static final int BUDGET_ID = 123;
     private static final Date FIRST_DAY_OF_PERIOD = valueOf("2000-04-10");
     private static final Date MIDDLE_OF_THE_PERIOD = valueOf("2000-04-25");
     private static final Date NEXT_MONTH_SAME_PERIOD = valueOf("2000-05-03");
-    private static final Date TODAY = valueOf("2000-04-06");
+    private static final Date TODAY = valueOf("2000-04-16");
 
     private MonthlyBudget sut;
 
@@ -42,6 +42,8 @@ public class MonthlyBudgetTest {
 
     private void setToday(java.util.Date today) {
         calendar.setTime(today);
+        when(calendar.clone()).thenReturn(firstDayOfPeriodCalendar);
+        when(firstDayOfPeriodCalendar.getTimeInMillis()).thenReturn(FIRST_DAY_OF_PERIOD.getTime());
     }
 
     @Before
@@ -80,20 +82,13 @@ public class MonthlyBudgetTest {
     //TODO fix its
     @Test
     public void shouldCorrectCalculateMonthlySpendsInNextMonthButInTheSamePeriod() {
-        when(calendar.get(Calendar.DAY_OF_MONTH)).thenReturn(3);
-        when(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)).thenReturn(31);
-        when(calendar.clone()).thenReturn(firstDayOfPeriodCalendar);
-        when(calendar.getTimeInMillis()).thenReturn(NEXT_MONTH_SAME_PERIOD.getTime());
-        when(firstDayOfPeriodCalendar.getTimeInMillis()).thenReturn(FIRST_DAY_OF_PERIOD.getTime());
-        when(budgetDatabase.getBudgetId(BUDGET.getName())).thenReturn(BUDGET_ID);
-        when(budgetDatabase.getBudget(BUDGET.getName())).thenReturn(BUDGET);
+        setToday(NEXT_MONTH_SAME_PERIOD);
 
-        when(budgetDatabase.getExpenditures(BUDGET_ID, NEXT_MONTH_SAME_PERIOD))
+        when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
                 .thenReturn(Arrays.asList(new Expenditure("name", 50, MIDDLE_OF_THE_PERIOD),
                         new Expenditure("name", 50, NEXT_MONTH_SAME_PERIOD)));
 
         assertEquals(100.0, sut.getMonthlySpends(BUDGET.getName()), 0.001);
-
     }
 
 }

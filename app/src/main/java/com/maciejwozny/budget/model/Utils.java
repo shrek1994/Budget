@@ -23,12 +23,12 @@ class Utils {
     }
 
     static Date getFirstDayOfPeriod(Calendar calendar, int beginningDay) {
-        calendar = (Calendar) calendar.clone();
-        if (calendar.get(Calendar.DAY_OF_MONTH) < beginningDay) {
-            calendar.add(Calendar.MONTH, -1);
+        Calendar firstDayCalendar = (Calendar) calendar.clone();
+        if (firstDayCalendar.get(Calendar.DAY_OF_MONTH) < beginningDay) {
+            firstDayCalendar.add(Calendar.MONTH, -1);
         }
-        calendar.set(Calendar.DAY_OF_MONTH, beginningDay);
-        Date firstDay = new Date(calendar.getTimeInMillis());
+        firstDayCalendar.set(Calendar.DAY_OF_MONTH, beginningDay);
+        Date firstDay = new Date(firstDayCalendar.getTimeInMillis());
         return firstDay;
     }
 }
