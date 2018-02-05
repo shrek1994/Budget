@@ -51,7 +51,7 @@ public class BudgetActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Your database was removed !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                database.onUpgrade(database.getWritableDatabase(), 0, 0);
+//                database.onUpgrade(database.getWritableDatabase(), 0, 0);
                 expenseAdditional.notifyObservers();
             }
         });
@@ -95,10 +95,10 @@ public class BudgetActivity extends AppCompatActivity {
                 return true;
             case R.id.expense_list:
                 Intent intent = new Intent(this, ExpenseListActivity.class);
-//                intent.putExtra(EXTRA_DATABASE, database);
                 startActivity(intent);
                 return true;
             case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

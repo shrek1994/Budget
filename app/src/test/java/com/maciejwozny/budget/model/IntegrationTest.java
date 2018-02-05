@@ -3,7 +3,6 @@ package com.maciejwozny.budget.model;
 import com.maciejwozny.budget.BuildConfig;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
