@@ -12,8 +12,8 @@ import java.util.List;
  * 2017 All rights reserved.
  */
 class Utils {
-    static int getAmount(IBudgetDatabase budgetDatabase, String name, Date fromDate) {
-        int amount = 0;
+    static double getAmount(IBudgetDatabase budgetDatabase, String name, Date fromDate) {
+        double amount = 0;
         int budgetId = budgetDatabase.getBudgetId(name);
         List<Expenditure> expenditures = budgetDatabase.getExpenditures(budgetId, fromDate);
         for (Expenditure expenditure: expenditures)

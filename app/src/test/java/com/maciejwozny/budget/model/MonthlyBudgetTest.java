@@ -92,4 +92,16 @@ public class MonthlyBudgetTest {
         assertEquals(100.0, sut.getMonthlySpends(BUDGET.getName()), 0.001);
     }
 
+    @Test
+    public void shouldCorrectShowMonthlySpendsWhenExpenceAreFloatValue() {
+        setToday(MIDDLE_OF_THE_PERIOD);
+
+        when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
+                .thenReturn(Arrays.asList(new Expenditure("name", 50.75, FIRST_DAY_OF_PERIOD),
+                        new Expenditure("name", 14.24, FIRST_DAY_OF_PERIOD)));
+
+        assertEquals(935.01, sut.getMonthlyRemaining(BUDGET.getName()), 0.001);
+        assertEquals(64.99, sut.getMonthlySpends(BUDGET.getName()), 0.001);
+    }
+
 }

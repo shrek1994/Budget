@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
 public class BudgetDatabaseTest {
     private final int BUDGET_ID = 123;
     private final Budget BUDGET = new Budget("name", 1, 1000);
-    private final Expenditure EXPENSE = new Expenditure(BUDGET_ID, "name", 500, Date.valueOf("2000-04-01"));
+    private final Expenditure EXPENSE = new Expenditure(BUDGET_ID, "name", 50.75, Date.valueOf("2000-04-01"));
 
     private BudgetDatabase sut;
     private SQLiteDatabase database;

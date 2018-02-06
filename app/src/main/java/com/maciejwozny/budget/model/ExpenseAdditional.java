@@ -22,7 +22,7 @@ public class ExpenseAdditional extends Observable {
         this.budgetDatabase = budgetDatabase;
     }
 
-    public void addExpense(String name, int amount, String date)
+    public void addExpense(String name, double amount, String date)
     {
         Expenditure expenditure = new Expenditure(name, amount, valueOf(date));
         expenditure.setBudgetId(budgetDatabase.getBudgetId(BudgetActivity.DEFAULT_BUDGET.getName()));

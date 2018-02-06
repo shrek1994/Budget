@@ -26,10 +26,10 @@ public class DailyBudget {
         int beginningDay = budget.getBeginningDay();
         int daysLeft = getDaysLeft(beginningDay);
         Date firstDayOfPeriod = Utils.getFirstDayOfPeriod(calendar, beginningDay);
-        int amount = Utils.getAmount(budgetDatabase, name, firstDayOfPeriod);
-        int todaySpends = Utils.getAmount(budgetDatabase, name, calendar.getTime());
+        double amount = Utils.getAmount(budgetDatabase, name, firstDayOfPeriod);
+        double todaySpends = Utils.getAmount(budgetDatabase, name, calendar.getTime());
 
-        return (monthlyBudget - amount + todaySpends) / daysLeft;
+        return (double)((int)((monthlyBudget - amount + todaySpends) * 100 / daysLeft)) / 100;
     }
 
     private int getDaysLeft(int beginningDay) {

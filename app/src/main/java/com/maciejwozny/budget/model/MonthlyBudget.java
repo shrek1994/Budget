@@ -27,7 +27,7 @@ public class MonthlyBudget {
         Budget budget = budgetDatabase.getBudget(budgetName);
         int beginningDay = budget.getBeginningDay();
         Date firstDayOfPeriod = Utils.getFirstDayOfPeriod(calendar, beginningDay);
-        int amount = Utils.getAmount(budgetDatabase, budgetName, firstDayOfPeriod);
+        double amount = Utils.getAmount(budgetDatabase, budgetName, firstDayOfPeriod);
         return amount;
     }
 

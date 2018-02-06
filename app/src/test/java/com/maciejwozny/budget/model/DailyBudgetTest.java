@@ -53,7 +53,7 @@ public class DailyBudgetTest {
 
     @Test
     public void shouldCorrectCalculateDailyBudgetWithoutAnyExpenditures() {
-        double expectedDailyBudget = 33.00;
+        double expectedDailyBudget = 33.33;
 
         setToday(FIRST_DAY_OF_PERIOD);
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
@@ -105,5 +105,21 @@ public class DailyBudgetTest {
 
         assertEquals(50, sut.getDailyBudget(BUDGET.getName()), 0.001);
         assertEquals(50, sut.getDailyRemainingBudget(BUDGET.getName()), 0.001);
+    }
+
+
+    @Test
+    public void shouldCorrectCalculateRemainingBudgetWithExpendituresWithFloatValue() {
+        setToday(TODAY);
+
+        when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
+                .thenReturn(Arrays.asList(
+                        new Expenditure("", 162.75, FIRST_DAY_OF_PERIOD),
+                        new Expenditure("", 10.38, TODAY)));
+        when(budgetDatabase.getExpenditures(BUDGET_ID, TODAY))
+                .thenReturn(Arrays.asList(new Expenditure("", 10.38, TODAY)));
+
+        assertEquals(33.49, sut.getDailyBudget(BUDGET.getName()), 0.001);
+        assertEquals(23.11, sut.getDailyRemainingBudget(BUDGET.getName()), 0.001);
     }
 }

@@ -81,21 +81,21 @@ public class IntegrationTest {
         assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(DEFAULT_BUDGET.getName()), 0.001);
         assertEquals(500, sut.monthlyBudget.getMonthlyRemaining(DEFAULT_BUDGET.getName()), 0.001);
 
-        assertEquals(55, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
-        assertEquals(55, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(55.55, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(55.55, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
     }
 
 //    @Test
     public void shouldCorrectShowsBudgetsThenNumbersAreFloat() {
         setToday(FIRST_DAY_OF_PERIOD);
 
-//        sut.expenseAdditional.addExpense("name", 99.99, FIRST_DAY_OF_PERIOD_STRING);
+        sut.expenseAdditional.addExpense("name", 99.75, FIRST_DAY_OF_PERIOD_STRING);
 
-        assertEquals(99.99, sut.monthlyBudget.getMonthlySpends(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(99.75, sut.monthlyBudget.getMonthlySpends(DEFAULT_BUDGET.getName()), 0.001);
         assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(DEFAULT_BUDGET.getName()), 0.001);
-        assertEquals(401, sut.monthlyBudget.getMonthlyRemaining(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(400.25, sut.monthlyBudget.getMonthlyRemaining(DEFAULT_BUDGET.getName()), 0.001);
 
         assertEquals(50, sut.dailyBudget.getDailyBudget(DEFAULT_BUDGET.getName()), 0.001);
-        assertEquals(-49.99, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(-49.75, sut.dailyBudget.getDailyRemainingBudget(DEFAULT_BUDGET.getName()), 0.001);
     }
 }

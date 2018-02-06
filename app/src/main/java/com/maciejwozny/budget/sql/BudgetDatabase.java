@@ -22,7 +22,7 @@ import static com.maciejwozny.budget.sql.tables.Period.getPeriod;
 
 /**
  * Created by Maciej Wozny on 21.10.2017.
- * 2017 All rights reserved.
+ * 2017-2018 All rights reserved.
  */
 public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase {
     private static final String TAG = BudgetDatabase.class.getSimpleName();
@@ -30,6 +30,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
 
     private static final String DATABASE_BUDGET_NAME = "Budget.db";
     private static final String CREATE_TABLE =  "create table if not exists ";
+    private static final int AMOUNT_MULTIPLIER = 100;
 
     private String createBudgets =
             CREATE_TABLE + TABLE_BUDGET_NAME +
@@ -181,7 +182,8 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         ContentValues values = new ContentValues();
         values.put(EXPENDITURE_BUDGET_ID, expenditure.getBudgetId());
         values.put(EXPENDITURE_NAME, expenditure.getName());
-        values.put(EXPENDITURE_AMOUNT, expenditure.getAmount());
+        int amount = (int)(expenditure.getAmount() * AMOUNT_MULTIPLIER);
+        values.put(EXPENDITURE_AMOUNT, amount);
         values.put(EXPENDITURE_DATE, expenditure.getDate().getTime());
         database.insert(TABLE_EXPENSES_NAME, null, values);
         Log.d(TAG, "Inserted: " + expenditure.toString());
@@ -192,8 +194,9 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         SQLiteDatabase database = this.getWritableDatabase();
         String whereClause = EXPENDITURE_NAME + "=? and " + EXPENDITURE_AMOUNT + "=? and "
                 + EXPENDITURE_DATE + "=?";
+        int amount = (int)(expenditure.getAmount() * AMOUNT_MULTIPLIER);
         String[] whereArgs = new String[] { expenditure.getName(),
-                Integer.toString(expenditure.getAmount()),
+                Integer.toString(amount),
                 Long.toString(expenditure.getDate().getTime()) };
         database.delete(TABLE_EXPENSES_NAME, whereClause, whereArgs);
     }
@@ -216,7 +219,8 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         if (cursor.moveToFirst()) {
             do {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(EXPENDITURE_NAME));
-                int amount = cursor.getInt(cursor.getColumnIndexOrThrow(EXPENDITURE_AMOUNT));
+                double amount = (double)cursor.getInt(cursor.getColumnIndexOrThrow(EXPENDITURE_AMOUNT))
+                        / AMOUNT_MULTIPLIER;
                 Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(EXPENDITURE_DATE)));
                 expenditures.add(new Expenditure(budgetId, name, amount, date));
             } while (cursor.moveToNext());

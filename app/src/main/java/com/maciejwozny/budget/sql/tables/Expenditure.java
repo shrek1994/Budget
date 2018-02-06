@@ -16,16 +16,16 @@ public class Expenditure {
 
     private int budgetId = 0;
     private String name;
-    private int amount;
+    private double amount;
     private Date date;
 
-    public Expenditure(String name, int amount, Date date) {
+    public Expenditure(String name, double amount, Date date) {
         this.name = name;
         this.amount = amount;
         this.date = date;
     }
 
-    public Expenditure(int budgetId, String name, int amount, Date date) {
+    public Expenditure(int budgetId, String name, double amount, Date date) {
         this.budgetId = budgetId;
         this.name = name;
         this.amount = amount;
@@ -44,7 +44,7 @@ public class Expenditure {
         return name;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
