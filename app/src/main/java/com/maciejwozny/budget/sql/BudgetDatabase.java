@@ -26,10 +26,10 @@ import static com.maciejwozny.budget.sql.tables.Period.getPeriod;
  */
 public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase {
     private static final String TAG = BudgetDatabase.class.getSimpleName();
-    private static final int version = 20171021;
+    private static final int version = 20180206;
 
     private static final String DATABASE_BUDGET_NAME = "Budget.db";
-    private static final String CREATE_TABLE =  "create table if not exists ";
+    private static final String CREATE_TABLE = "create table if not exists ";
     private static final int AMOUNT_MULTIPLIER = 100;
 
     private String createBudgets =
@@ -54,7 +54,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                     "REFERENCES " + TABLE_BUDGET_NAME + "( " + BUDGET_ID + " ) " +
                     ");";
 
-    public BudgetDatabase(Context context){
+    public BudgetDatabase(Context context) {
         super(context, DATABASE_BUDGET_NAME, null, version);
     }
 
@@ -65,8 +65,10 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        dropDownDatabase(db);
-        createDatabase(db);
+        if (oldVersion == 20171021) {
+            db.execSQL("UPDATE " + TABLE_EXPENSES_NAME + " SET " + EXPENDITURE_AMOUNT + " = " +
+                EXPENDITURE_AMOUNT + " * " + Integer.toString(AMOUNT_MULTIPLIER));
+        }
     }
 
     private void dropDownDatabase(SQLiteDatabase db) {
@@ -102,7 +104,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     public Budget getBudget(String budgetName) {
         Log.d(TAG, "Looking for: " + budgetName);
         String selection = Budget.BUDGET_NAME + " = ?";
-        String[] selectionArgs = { budgetName };
+        String[] selectionArgs = {budgetName};
         Cursor cursor = getWritableDatabase().query(
                 TABLE_BUDGET_NAME,
                 new String[]{BUDGET_NAME,
@@ -163,7 +165,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
             return 0;
         }
         String selection = Budget.BUDGET_NAME + " = ?";
-        String[] selectionArgs = { budgetName };
+        String[] selectionArgs = {budgetName};
         Cursor cursor = getWritableDatabase().query(
                 TABLE_BUDGET_NAME,
                 new String[]{BUDGET_ID},
@@ -182,7 +184,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         ContentValues values = new ContentValues();
         values.put(EXPENDITURE_BUDGET_ID, expenditure.getBudgetId());
         values.put(EXPENDITURE_NAME, expenditure.getName());
-        int amount = (int)(expenditure.getAmount() * AMOUNT_MULTIPLIER);
+        int amount = (int) (expenditure.getAmount() * AMOUNT_MULTIPLIER);
         values.put(EXPENDITURE_AMOUNT, amount);
         values.put(EXPENDITURE_DATE, expenditure.getDate().getTime());
         database.insert(TABLE_EXPENSES_NAME, null, values);
@@ -194,10 +196,10 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         SQLiteDatabase database = this.getWritableDatabase();
         String whereClause = EXPENDITURE_NAME + "=? and " + EXPENDITURE_AMOUNT + "=? and "
                 + EXPENDITURE_DATE + "=?";
-        int amount = (int)(expenditure.getAmount() * AMOUNT_MULTIPLIER);
-        String[] whereArgs = new String[] { expenditure.getName(),
+        int amount = (int) (expenditure.getAmount() * AMOUNT_MULTIPLIER);
+        String[] whereArgs = new String[]{expenditure.getName(),
                 Integer.toString(amount),
-                Long.toString(expenditure.getDate().getTime()) };
+                Long.toString(expenditure.getDate().getTime())};
         database.delete(TABLE_EXPENSES_NAME, whereClause, whereArgs);
     }
 
@@ -206,7 +208,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         List<Expenditure> expenditures = new ArrayList<>();
 
         String selection = EXPENDITURE_BUDGET_ID + " = ? and " + EXPENDITURE_DATE + " >= ?";
-        String[] selectionArgs = { Integer.toString(budgetId), Long.toString(fromDate.getTime()) };
+        String[] selectionArgs = {Integer.toString(budgetId), Long.toString(fromDate.getTime())};
         Cursor cursor = getWritableDatabase().query(
                 TABLE_EXPENSES_NAME,
                 new String[]{EXPENDITURE_NAME,
@@ -219,7 +221,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         if (cursor.moveToFirst()) {
             do {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(EXPENDITURE_NAME));
-                double amount = (double)cursor.getInt(cursor.getColumnIndexOrThrow(EXPENDITURE_AMOUNT))
+                double amount = (double) cursor.getInt(cursor.getColumnIndexOrThrow(EXPENDITURE_AMOUNT))
                         / AMOUNT_MULTIPLIER;
                 Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(EXPENDITURE_DATE)));
                 expenditures.add(new Expenditure(budgetId, name, amount, date));
@@ -228,4 +230,31 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         Log.d(TAG, "All expenditures: " + expenditures);
         return expenditures;
     }
+
+    public List<Expenditure> getExpenditures_database20171021(int budgetId, Date fromDate) {
+        List<Expenditure> expenditures = new ArrayList<>();
+
+        String selection = EXPENDITURE_BUDGET_ID + " = ? and " + EXPENDITURE_DATE + " >= ?";
+        String[] selectionArgs = {Integer.toString(budgetId), Long.toString(fromDate.getTime())};
+        Cursor cursor = getWritableDatabase().query(
+                TABLE_EXPENSES_NAME,
+                new String[]{EXPENDITURE_NAME,
+                        EXPENDITURE_AMOUNT,
+                        EXPENDITURE_DATE},
+                selection,
+                selectionArgs,
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(EXPENDITURE_NAME));
+                double amount = (double) cursor.getInt(cursor.getColumnIndexOrThrow(EXPENDITURE_AMOUNT));
+                Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(EXPENDITURE_DATE)));
+                expenditures.add(new Expenditure(budgetId, name, amount, date));
+            } while (cursor.moveToNext());
+        }
+        Log.d(TAG, "All expenditures: " + expenditures);
+        return expenditures;
+    }
+
 }

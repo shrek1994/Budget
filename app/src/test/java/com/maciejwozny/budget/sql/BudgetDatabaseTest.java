@@ -116,4 +116,15 @@ public class BudgetDatabaseTest {
         assertEquals(new ArrayList<Expenditure>(),
                 sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
     }
+
+    @Test
+    public void shouldUpdateFrom20171021Version_shouldMultiplyByHundred() {
+        sut.insertExpenditure(EXPENSE);
+        sut.onUpgrade(sut.getWritableDatabase(), 20171021, 20180206);
+
+        assertEquals(new ArrayList<Expenditure>(
+                Collections.singletonList(new Expenditure(BUDGET_ID, "name", 5075,
+                                                            Date.valueOf("2000-04-01")))),
+                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+    }
 }

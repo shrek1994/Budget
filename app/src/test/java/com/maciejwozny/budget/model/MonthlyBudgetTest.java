@@ -80,7 +80,6 @@ public class MonthlyBudgetTest {
         assertEquals(950.0, sut.getMonthlyRemaining(BUDGET.getName()), 0.001);
     }
 
-    //TODO fix its
     @Test
     public void shouldCorrectCalculateMonthlySpendsInNextMonthButInTheSamePeriod() {
         setToday(NEXT_MONTH_SAME_PERIOD);
@@ -93,7 +92,7 @@ public class MonthlyBudgetTest {
     }
 
     @Test
-    public void shouldCorrectShowMonthlySpendsWhenExpenceAreFloatValue() {
+    public void shouldCorrectShowMonthlySpendsWhenExpendituresAreWithFloatValue() {
         setToday(MIDDLE_OF_THE_PERIOD);
 
         when(budgetDatabase.getExpenditures(BUDGET_ID, FIRST_DAY_OF_PERIOD))
