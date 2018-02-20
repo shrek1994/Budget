@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 
 /**
  * Created by Maciej Wozny on 21.10.2017.
- * 2017 All rights reserved.
+ * 2017-2018 All rights reserved.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class,
@@ -35,7 +35,12 @@ import static org.junit.Assert.*;
 public class BudgetDatabaseTest {
     private final int BUDGET_ID = 123;
     private final Budget BUDGET = new Budget("name", 1, 1000);
-    private final Expenditure EXPENSE = new Expenditure(BUDGET_ID, "name", 50.75, Date.valueOf("2000-04-01"));
+    private final Expenditure EXPENSE =
+            new Expenditure(BUDGET_ID, "name", 50.75, Date.valueOf("2000-04-01"));
+    private final Expenditure OLDEST_EXPENSE =
+            new Expenditure(BUDGET_ID, "old", 1.01, Date.valueOf("2000-03-25"));
+    private final Expenditure NEWEST_EXPENSE =
+            new Expenditure(BUDGET_ID, "new", 9.99, Date.valueOf("2000-04-05"));
 
     private BudgetDatabase sut;
     private SQLiteDatabase database;
@@ -118,7 +123,7 @@ public class BudgetDatabaseTest {
     }
 
     @Test
-    public void shouldUpdateFrom20171021Version_shouldMultiplyByHundred() {
+    public void shouldUpdateFrom20171021VersionTo20180206Ver_shouldMultiplyByHundred() {
         sut.insertExpenditure(EXPENSE);
         sut.onUpgrade(sut.getWritableDatabase(), 20171021, 20180206);
 
@@ -126,5 +131,16 @@ public class BudgetDatabaseTest {
                 Collections.singletonList(new Expenditure(BUDGET_ID, "name", 5075,
                                                             Date.valueOf("2000-04-01")))),
                 sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+    }
+
+
+    @Test
+    public void shouldReturnSortedExpendituresFromNewestToOldest() {
+        sut.insertExpenditure(EXPENSE);
+        sut.insertExpenditure(OLDEST_EXPENSE);
+        sut.insertExpenditure(NEWEST_EXPENSE);
+
+        assertEquals(new ArrayList<>(Arrays.asList(NEWEST_EXPENSE, EXPENSE, OLDEST_EXPENSE)),
+                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-01-01")));
     }
 }

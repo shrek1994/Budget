@@ -32,7 +32,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     private static final String CREATE_TABLE = "create table if not exists ";
     private static final int AMOUNT_MULTIPLIER = 100;
 
-    private String createBudgets =
+    private static final String createBudgets =
             CREATE_TABLE + TABLE_BUDGET_NAME +
                     " ( " +
                     BUDGET_ID + " int primary key, " +
@@ -43,7 +43,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                     BUDGET_REPEATEDLY + " boolean default false " +
                     ");";
 
-    private String createExpenses =
+    private static final String createExpenses =
             CREATE_TABLE + TABLE_EXPENSES_NAME + " ( " +
                     EXPENDITURE_ID + " int primary key, " +
                     EXPENDITURE_BUDGET_ID + " int, " +
@@ -68,6 +68,10 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         if (oldVersion == 20171021) {
             db.execSQL("UPDATE " + TABLE_EXPENSES_NAME + " SET " + EXPENDITURE_AMOUNT + " = " +
                 EXPENDITURE_AMOUNT + " * " + Integer.toString(AMOUNT_MULTIPLIER));
+        }
+        else {
+            dropDownDatabase(db);
+            onCreate(db);
         }
     }
 
@@ -216,7 +220,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                         EXPENDITURE_DATE},
                 selection,
                 selectionArgs,
-                null, null, null);
+                null, null, EXPENDITURE_DATE + " DESC");
 
         if (cursor.moveToFirst()) {
             do {

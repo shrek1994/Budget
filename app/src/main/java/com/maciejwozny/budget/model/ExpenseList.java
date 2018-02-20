@@ -9,7 +9,7 @@ import java.util.Observable;
 
 /**
  * Created by Maciej Wozny on 20.11.17.
- * 2017 All rights reserved.
+ * 2017-2018 All rights reserved.
  */
 public class ExpenseList extends Observable {
     private IBudgetDatabase database;
@@ -21,7 +21,7 @@ public class ExpenseList extends Observable {
     public List<Expenditure> getExpenses(String budgetName) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
-        return database.getExpenditures(database.getBudgetId(budgetName),calendar.getTime());
+        return database.getExpenditures(database.getBudgetId(budgetName), calendar.getTime());
     }
 
     public void removeExpense(Expenditure expenditure) {
