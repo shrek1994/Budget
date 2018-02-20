@@ -68,7 +68,7 @@ public class AddExpenseView implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         expenseAdditional.addExpense(expenseName.getText().toString(),
-                Integer.parseInt(expenseAmount.getText().toString()),
+                Double.parseDouble(expenseAmount.getText().toString()),
                 valueOf(expenseDate.getText().toString()));
     }
 
