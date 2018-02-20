@@ -33,14 +33,13 @@ import static org.junit.Assert.*;
         sdk = LOLLIPOP,
         manifest = "src/main/AndroidManifest.xml")
 public class BudgetDatabaseTest {
-    private final int BUDGET_ID = 123;
     private final Budget BUDGET = new Budget("name", 1, 1000);
     private final Expenditure EXPENSE =
-            new Expenditure(BUDGET_ID, "name", 50.75, Date.valueOf("2000-04-01"));
+            new Expenditure("name", 50.75, Date.valueOf("2000-04-01"));
     private final Expenditure OLDEST_EXPENSE =
-            new Expenditure(BUDGET_ID, "old", 1.01, Date.valueOf("2000-03-25"));
+            new Expenditure("old", 1.01, Date.valueOf("2000-03-25"));
     private final Expenditure NEWEST_EXPENSE =
-            new Expenditure(BUDGET_ID, "new", 9.99, Date.valueOf("2000-04-05"));
+            new Expenditure("new", 9.99, Date.valueOf("2000-04-05"));
 
     private BudgetDatabase sut;
     private SQLiteDatabase database;
@@ -65,6 +64,7 @@ public class BudgetDatabaseTest {
     public void shouldCorrectInsertBudgetIntoDatabase() {
         List<Budget> expectedBudgets = new ArrayList<>(Arrays.asList(DEFAULT_BUDGET, BUDGET));
 
+        sut.insertBudget(DEFAULT_BUDGET);
         sut.insertBudget(BUDGET);
 
         assertEquals(expectedBudgets, sut.getBudgets());
@@ -92,7 +92,7 @@ public class BudgetDatabaseTest {
 
         sut.insertExpenditure(EXPENSE);
 
-        assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+        assertEquals(expectedExpenditures, sut.getExpenditures(Date.valueOf("2000-04-01")));
     }
 
 
@@ -101,7 +101,7 @@ public class BudgetDatabaseTest {
         sut.insertExpenditure(EXPENSE);
 
         assertEquals(new ArrayList<Expenditure>(),
-                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-05")));
+                sut.getExpenditures(Date.valueOf("2000-04-05")));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class BudgetDatabaseTest {
 
         sut.insertExpenditure(EXPENSE);
 
-        assertEquals(expectedExpenditures, sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+        assertEquals(expectedExpenditures, sut.getExpenditures(Date.valueOf("2000-04-01")));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class BudgetDatabaseTest {
         sut.removeExpense(EXPENSE);
 
         assertEquals(new ArrayList<Expenditure>(),
-                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+                sut.getExpenditures(Date.valueOf("2000-04-01")));
     }
 
     @Test
@@ -128,9 +128,9 @@ public class BudgetDatabaseTest {
         sut.onUpgrade(sut.getWritableDatabase(), 20171021, 20180206);
 
         assertEquals(new ArrayList<Expenditure>(
-                Collections.singletonList(new Expenditure(BUDGET_ID, "name", 5075,
+                Collections.singletonList(new Expenditure("name", 5075,
                                                             Date.valueOf("2000-04-01")))),
-                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-04-01")));
+                sut.getExpenditures(Date.valueOf("2000-04-01")));
     }
 
 
@@ -141,6 +141,6 @@ public class BudgetDatabaseTest {
         sut.insertExpenditure(NEWEST_EXPENSE);
 
         assertEquals(new ArrayList<>(Arrays.asList(NEWEST_EXPENSE, EXPENSE, OLDEST_EXPENSE)),
-                sut.getExpenditures(BUDGET_ID, Date.valueOf("2000-01-01")));
+                sut.getExpenditures(Date.valueOf("2000-01-01")));
     }
 }

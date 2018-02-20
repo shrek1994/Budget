@@ -2,6 +2,7 @@ package com.maciejwozny.budget;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,12 +31,11 @@ import java.util.Calendar;
  */
 public class BudgetActivity extends AppCompatActivity {
     private static final String TAG = BudgetActivity.class.getSimpleName();
-    public final static Budget DEFAULT_BUDGET = new Budget("default budget", 10, 1500);
-//    public static final String EXTRA_DATABASE = "EXTRA_DATABASE";
+    public static Budget DEFAULT_BUDGET = new Budget("default budget", 10, 1500);
 
     private BudgetDatabase database = new BudgetDatabase(this);
-    private DailyBudget dailyBudget = new DailyBudget(database, Calendar.getInstance());
-    private MonthlyBudget monthlyBudget = new MonthlyBudget(database, Calendar.getInstance());
+    private DailyBudget dailyBudget = new DailyBudget(this, database, Calendar.getInstance());
+    private MonthlyBudget monthlyBudget = new MonthlyBudget(this, database, Calendar.getInstance());
     private ExpenseAdditional expenseAdditional = new ExpenseAdditional(database);
 
     private DailyBudgetView dailyBudgetView;
@@ -56,6 +56,8 @@ public class BudgetActivity extends AppCompatActivity {
                 Snackbar.make(view, "Your database was removed !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 //                database.onUpgrade(database.getWritableDatabase(), 0, 0);
+                finish();
+                startActivity(getIntent());
                 expenseAdditional.notifyObservers();
             }
         });
@@ -63,9 +65,9 @@ public class BudgetActivity extends AppCompatActivity {
 //*********************************************************************************************//
         //TODO move to another class or method
 
-        TextView todaysBudget = (TextView) findViewById(R.id.todaysBudgetTextView);
-        TextView todaysRemainingBudget = (TextView) findViewById(R.id.todaysRemainingBudgetTextView);
-        dailyBudgetView = new DailyBudgetView(todaysBudget, todaysRemainingBudget, dailyBudget);
+        TextView todayBudget = (TextView) findViewById(R.id.todaysBudgetTextView);
+        TextView todayRemainingBudget = (TextView) findViewById(R.id.todaysRemainingBudgetTextView);
+        dailyBudgetView = new DailyBudgetView(todayBudget, todayRemainingBudget, dailyBudget);
 
         TextView monthlyBudget = (TextView) findViewById(R.id.monthlyBudgetTextView);
         TextView monthlySpends = (TextView) findViewById(R.id.monthlySpendsTextView);
@@ -82,6 +84,12 @@ public class BudgetActivity extends AppCompatActivity {
         expenseAdditional.addObserver(monthlyBudgetView);
 
 //*********************************************************************************************//
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        expenseAdditional.notifyObservers();
     }
 
     @Override

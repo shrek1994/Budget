@@ -11,6 +11,7 @@ import com.maciejwozny.budget.BudgetActivity;
 import com.maciejwozny.budget.sql.tables.Budget;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import static com.maciejwozny.budget.sql.tables.Period.getPeriod;
  */
 public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase {
     private static final String TAG = BudgetDatabase.class.getSimpleName();
-    private static final int version = 20180206;
+    private static final int version = 20180220;
 
     private static final String DATABASE_BUDGET_NAME = "Budget.db";
     private static final String CREATE_TABLE = "create table if not exists ";
@@ -46,12 +47,9 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     private static final String createExpenses =
             CREATE_TABLE + TABLE_EXPENSES_NAME + " ( " +
                     EXPENDITURE_ID + " int primary key, " +
-                    EXPENDITURE_BUDGET_ID + " int, " +
                     EXPENDITURE_AMOUNT + " int not null, " +
                     EXPENDITURE_DATE + " date not null, " +
-                    EXPENDITURE_NAME + " varchar(50), " +
-                    "FOREIGN KEY ( " + EXPENDITURE_BUDGET_ID + " ) " +
-                    "REFERENCES " + TABLE_BUDGET_NAME + "( " + BUDGET_ID + " ) " +
+                    EXPENDITURE_NAME + " varchar(50) " +
                     ");";
 
     public BudgetDatabase(Context context) {
@@ -70,8 +68,20 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                 EXPENDITURE_AMOUNT + " * " + Integer.toString(AMOUNT_MULTIPLIER));
         }
         else {
-            dropDownDatabase(db);
-            onCreate(db);
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.MONTH, -2);
+                List<Expenditure> expenditures = getExpenditures(calendar.getTime());
+                dropDownDatabase(db);
+                onCreate(db);
+                for (Expenditure expenditure: expenditures) {
+                    insertExpenditure(expenditure);
+                }
+            }
+            catch (Exception e) {
+                dropDownDatabase(db);
+                onCreate(db);
+            }
         }
     }
 
@@ -83,8 +93,6 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     private void createDatabase(SQLiteDatabase db) {
         db.execSQL(createBudgets);
         db.execSQL(createExpenses);
-
-        insertBudget(BudgetActivity.DEFAULT_BUDGET, db);
     }
 
     private void insertBudget(Budget budget, SQLiteDatabase database) {
@@ -186,7 +194,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     public void insertExpenditure(Expenditure expenditure) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(EXPENDITURE_BUDGET_ID, expenditure.getBudgetId());
+//        values.put(EXPENDITURE_BUDGET_ID, expenditure.getBudgetId());
         values.put(EXPENDITURE_NAME, expenditure.getName());
         int amount = (int) (expenditure.getAmount() * AMOUNT_MULTIPLIER);
         values.put(EXPENDITURE_AMOUNT, amount);
@@ -208,11 +216,11 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
     }
 
     @Override
-    public List<Expenditure> getExpenditures(int budgetId, Date fromDate) {
+    public List<Expenditure> getExpenditures(Date fromDate) {
         List<Expenditure> expenditures = new ArrayList<>();
 
-        String selection = EXPENDITURE_BUDGET_ID + " = ? and " + EXPENDITURE_DATE + " >= ?";
-        String[] selectionArgs = {Integer.toString(budgetId), Long.toString(fromDate.getTime())};
+        String selection = EXPENDITURE_DATE + " >= ?";
+        String[] selectionArgs = {Long.toString(fromDate.getTime())};
         Cursor cursor = getWritableDatabase().query(
                 TABLE_EXPENSES_NAME,
                 new String[]{EXPENDITURE_NAME,
@@ -228,7 +236,7 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
                 double amount = (double) cursor.getInt(cursor.getColumnIndexOrThrow(EXPENDITURE_AMOUNT))
                         / AMOUNT_MULTIPLIER;
                 Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(EXPENDITURE_DATE)));
-                expenditures.add(new Expenditure(budgetId, name, amount, date));
+                expenditures.add(new Expenditure(name, amount, date));
             } while (cursor.moveToNext());
         }
         Log.d(TAG, "All expenditures: " + expenditures);

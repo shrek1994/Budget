@@ -18,8 +18,8 @@ public class Budget {
 
     private Budget(Context context, Calendar calendar) {
         database = new BudgetDatabase(context);
-        dailyBudget = new DailyBudget(database, calendar);
-        monthlyBudget = new MonthlyBudget(database, calendar);
+        dailyBudget = new DailyBudget(context, database, calendar);
+        monthlyBudget = new MonthlyBudget(context, database, calendar);
         expenseAdditional = new ExpenseAdditional(database);
     }
 

@@ -1,21 +1,28 @@
 package com.maciejwozny.budget.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.maciejwozny.budget.SettingsActivity;
 import com.maciejwozny.budget.sql.IBudgetDatabase;
 import com.maciejwozny.budget.sql.tables.Expenditure;
+import com.maciejwozny.budget.sql.tables.Budget;
 
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.maciejwozny.budget.BudgetActivity.DEFAULT_BUDGET;
+
 /**
  * Created by Maciej Wozny on 07.12.17.
- * 2017 All rights reserved.
+ * 2017-2018 All rights reserved.
  */
 class Utils {
-    static double getAmount(IBudgetDatabase budgetDatabase, String name, Date fromDate) {
+    static double getAmount(IBudgetDatabase budgetDatabase, Date fromDate) {
         double amount = 0;
-        int budgetId = budgetDatabase.getBudgetId(name);
-        List<Expenditure> expenditures = budgetDatabase.getExpenditures(budgetId, fromDate);
+        List<Expenditure> expenditures = budgetDatabase.getExpenditures(fromDate);
         for (Expenditure expenditure: expenditures)
             amount += expenditure.getAmount();
         return amount;
@@ -29,5 +36,14 @@ class Utils {
         firstDayCalendar.set(Calendar.DAY_OF_MONTH, beginningDay);
         Date firstDay = new Date(firstDayCalendar.getTimeInMillis());
         return firstDay;
+    }
+
+    static public Budget getBudget(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        int beginningDay = Integer.parseInt(sharedPref.getString(SettingsActivity.DAY_OF_PAYMENT,
+                Integer.toString(DEFAULT_BUDGET.getBeginningDay())));
+        int budgetValue = Integer.parseInt(sharedPref.getString(SettingsActivity.BUDGET_VALUE,
+                Integer.toString(DEFAULT_BUDGET.getMonthlyBudget())));
+        return new Budget("default budget", beginningDay, budgetValue);
     }
 }

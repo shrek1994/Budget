@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="1000"
+        android:key="budget_value_setting"
+        android:inputType="number"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/monthly_budget"
+        android:summary="from 1 to infinity" />
+    <EditTextPreference
+        android:defaultValue="1"
+        android:key="day_of_payment_setting"
+        android:inputType="number"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/day_of_payment"
+        android:summary="from 1 to 28"/>
+</PreferenceScreen>

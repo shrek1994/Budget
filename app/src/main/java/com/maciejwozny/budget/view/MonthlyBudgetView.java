@@ -35,11 +35,12 @@ public class MonthlyBudgetView implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         Log.d(TAG, "refreshing");
-        monthlyBudgetText.setText(context.getString(R.string.monthly_budget)
-                + monthlyBudget.getMonthlyBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
+        //TODO move to string.xml
+        monthlyBudgetText.setText(context.getString(R.string.monthly_budget) + ": "
+                + monthlyBudget.getMonthlyBudget());
         monthlySpends.setText("Monthly spends: "
-                + monthlyBudget.getMonthlySpends(BudgetActivity.DEFAULT_BUDGET.getName()));
+                + monthlyBudget.getMonthlySpends());
         remainingMonthlyBudget.setText("Remained: "
-                + monthlyBudget.getMonthlyRemaining(BudgetActivity.DEFAULT_BUDGET.getName()));
+                + monthlyBudget.getMonthlyRemaining());
     }
 }

@@ -29,9 +29,10 @@ public class DailyBudgetView implements Observer {
     @Override
     public void update(Observable o, Object obj) {
         Log.d(TAG, "refreshing");
+        //TODO move to strings.xml !
         todayBudget.setText("Today's budget: "
-                + dailyBudget.getDailyBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
+                + dailyBudget.getDailyBudget());
         remainingDailyBudget.setText("Today's remaining budget: "
-                + dailyBudget.getDailyRemainingBudget(BudgetActivity.DEFAULT_BUDGET.getName()));
+                + dailyBudget.getDailyRemainingBudget());
     }
 }

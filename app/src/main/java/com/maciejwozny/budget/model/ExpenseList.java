@@ -18,10 +18,10 @@ public class ExpenseList extends Observable {
         this.database = database;
     }
 
-    public List<Expenditure> getExpenses(String budgetName) {
+    public List<Expenditure> getExpenses() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
-        return database.getExpenditures(database.getBudgetId(budgetName), calendar.getTime());
+        return database.getExpenditures(calendar.getTime());
     }
 
     public void removeExpense(Expenditure expenditure) {

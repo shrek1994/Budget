@@ -36,7 +36,7 @@ public class ExpenseListActivity extends AppCompatActivity {
         final ListView listview = (ListView) findViewById(R.id.expenseListView);
         final ExpenseArrayAdapter adapter = new ExpenseArrayAdapter(this,
                 R.layout.expense_row,
-                expenseList.getExpenses(BudgetActivity.DEFAULT_BUDGET.getName()));
+                expenseList.getExpenses());
         listview.setAdapter(adapter);
     }
 

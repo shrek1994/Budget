@@ -11,6 +11,7 @@ import java.util.List;
  * 2017 All rights reserved.
  */
 public interface IBudgetDatabase {
+    //TODO remove inserting budget - it is in settings
     void insertBudget(Budget budget);
     Budget getBudget(String budgetName);
     List<Budget> getBudgets();
@@ -18,5 +19,5 @@ public interface IBudgetDatabase {
 
     void insertExpenditure(Expenditure expenditure);
     void removeExpense(Expenditure expenditure);
-    List<Expenditure> getExpenditures(int budgetId, Date fromDate);
+    List<Expenditure> getExpenditures(Date fromDate);
 }

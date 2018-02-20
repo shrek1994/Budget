@@ -31,6 +31,7 @@ public class BudgetTest {
 
     @Test
     public void shouldReturnDefaultBudget() {
-        assertEquals(DEFAULT_BUDGET.getMonthlyBudget(), sut.monthlyBudget.getMonthlyBudget(DEFAULT_BUDGET.getName()), 0.001);
+        assertEquals(DEFAULT_BUDGET.getMonthlyBudget(),
+                sut.monthlyBudget.getMonthlyBudget(), 0.001);
     }
 }

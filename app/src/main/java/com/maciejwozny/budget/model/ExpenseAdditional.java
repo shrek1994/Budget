@@ -25,7 +25,6 @@ public class ExpenseAdditional extends Observable {
     public void addExpense(String name, double amount, String date)
     {
         Expenditure expenditure = new Expenditure(name, amount, valueOf(date));
-        expenditure.setBudgetId(budgetDatabase.getBudgetId(BudgetActivity.DEFAULT_BUDGET.getName()));
         budgetDatabase.insertExpenditure(expenditure);
         notifyObservers();
     }
