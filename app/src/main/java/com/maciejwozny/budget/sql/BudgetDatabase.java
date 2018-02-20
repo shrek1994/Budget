@@ -231,30 +231,4 @@ public class BudgetDatabase extends SQLiteOpenHelper implements IBudgetDatabase 
         return expenditures;
     }
 
-    public List<Expenditure> getExpenditures_database20171021(int budgetId, Date fromDate) {
-        List<Expenditure> expenditures = new ArrayList<>();
-
-        String selection = EXPENDITURE_BUDGET_ID + " = ? and " + EXPENDITURE_DATE + " >= ?";
-        String[] selectionArgs = {Integer.toString(budgetId), Long.toString(fromDate.getTime())};
-        Cursor cursor = getWritableDatabase().query(
-                TABLE_EXPENSES_NAME,
-                new String[]{EXPENDITURE_NAME,
-                        EXPENDITURE_AMOUNT,
-                        EXPENDITURE_DATE},
-                selection,
-                selectionArgs,
-                null, null, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String name = cursor.getString(cursor.getColumnIndexOrThrow(EXPENDITURE_NAME));
-                double amount = (double) cursor.getInt(cursor.getColumnIndexOrThrow(EXPENDITURE_AMOUNT));
-                Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(EXPENDITURE_DATE)));
-                expenditures.add(new Expenditure(budgetId, name, amount, date));
-            } while (cursor.moveToNext());
-        }
-        Log.d(TAG, "All expenditures: " + expenditures);
-        return expenditures;
-    }
-
 }
