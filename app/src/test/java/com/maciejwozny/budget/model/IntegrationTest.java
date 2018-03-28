@@ -54,35 +54,35 @@ public class IntegrationTest {
         setToday(FIRST_DAY_OF_PERIOD);
 
         assertEquals(0, sut.monthlyBudget.getMonthlySpends(), 0.001);
-        assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(), 0.001);
-        assertEquals(1500, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
+        assertEquals(1000, sut.monthlyBudget.getMonthlyBudget(), 0.001);
+        assertEquals(1000, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
 
-        assertEquals(50, sut.dailyBudget.getDailyBudget(), 0.001);
-        assertEquals(50, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
+        assertEquals(33.33, sut.dailyBudget.getDailyBudget(), 0.001);
+        assertEquals(33.33, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
 
-        sut.expenseAdditional.addExpense("name", 50, FIRST_DAY_OF_PERIOD_STRING);
+        sut.expenseAdditional.addExpense("name", 33.33, FIRST_DAY_OF_PERIOD_STRING);
 
-        assertEquals(50, sut.monthlyBudget.getMonthlySpends(), 0.001);
-        assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(), 0.001);
-        assertEquals(1450, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
+        assertEquals(33.33, sut.monthlyBudget.getMonthlySpends(), 0.001);
+        assertEquals(1000, sut.monthlyBudget.getMonthlyBudget(), 0.001);
+        assertEquals(966.67, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
 
-        assertEquals(50, sut.dailyBudget.getDailyBudget(), 0.001);
+        assertEquals(33.33, sut.dailyBudget.getDailyBudget(), 0.001);
         assertEquals(0, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
     }
 
 
     @Test
     public void shouldCorrectShowsBudgetsInNextMonthButInTheSamePeriod() {
-        sut.expenseAdditional.addExpense("name", 1000, FIRST_DAY_OF_PERIOD_STRING);
+        sut.expenseAdditional.addExpense("name", 750, FIRST_DAY_OF_PERIOD_STRING);
 
         setToday(FIRST_DAY_OF_NEXT_MONTH);
 
-        assertEquals(1000, sut.monthlyBudget.getMonthlySpends(), 0.001);
-        assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(), 0.001);
-        assertEquals(500, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
+        assertEquals(750, sut.monthlyBudget.getMonthlySpends(), 0.001);
+        assertEquals(1000, sut.monthlyBudget.getMonthlyBudget(), 0.001);
+        assertEquals(250, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
 
-        assertEquals(55.55, sut.dailyBudget.getDailyBudget(), 0.001);
-        assertEquals(55.55, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
+        assertEquals(27.77, sut.dailyBudget.getDailyBudget(), 0.001);
+        assertEquals(27.77, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
     }
 
 //    @Test
