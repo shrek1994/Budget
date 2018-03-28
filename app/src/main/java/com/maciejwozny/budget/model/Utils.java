@@ -9,9 +9,12 @@ import com.maciejwozny.budget.sql.IBudgetDatabase;
 import com.maciejwozny.budget.sql.tables.Expenditure;
 import com.maciejwozny.budget.sql.tables.Budget;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static com.maciejwozny.budget.BudgetActivity.DEFAULT_BUDGET;
 
@@ -45,5 +48,12 @@ class Utils {
         int budgetValue = Integer.parseInt(sharedPref.getString(SettingsActivity.BUDGET_VALUE,
                 Integer.toString(DEFAULT_BUDGET.getMonthlyBudget())));
         return new Budget("default budget", beginningDay, budgetValue);
+    }
+
+    static public double getOnlyTwoDigitsAfterDot(double number) {
+        DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance(Locale.UK).clone();
+        decimalFormat.applyPattern("0.00");
+        String formatResult = decimalFormat.format(number);
+        return Double.parseDouble(formatResult);
     }
 }

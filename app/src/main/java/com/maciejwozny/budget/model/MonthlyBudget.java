@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * Created by Maciej Wozny on 21.10.2017.
- * 2017 All rights reserved.
+ * 2017-2018 All rights reserved.
  */
 public class MonthlyBudget {
     private Context context;
@@ -25,7 +25,8 @@ public class MonthlyBudget {
     }
 
     public double getMonthlyBudget() {
-        return Utils.getBudget(context).getMonthlyBudget();
+        double monthlyBudget = Utils.getBudget(context).getMonthlyBudget();
+        return Utils.getOnlyTwoDigitsAfterDot(monthlyBudget);
     }
 
     public double getMonthlySpends() {
@@ -33,10 +34,11 @@ public class MonthlyBudget {
         int beginningDay = budget.getBeginningDay();
         Date firstDayOfPeriod = Utils.getFirstDayOfPeriod(calendar, beginningDay);
         double amount = Utils.getAmount(budgetDatabase, firstDayOfPeriod);
-        return amount;
+        return Utils.getOnlyTwoDigitsAfterDot(amount);
     }
 
     public double getMonthlyRemaining() {
-        return getMonthlyBudget() - getMonthlySpends();
+        double monthlyRemaining = getMonthlyBudget() - getMonthlySpends();
+        return Utils.getOnlyTwoDigitsAfterDot(monthlyRemaining);
     }
 }

@@ -1,5 +1,9 @@
 package com.maciejwozny.budget.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.maciejwozny.budget.BuildConfig;
 
 import org.junit.Before;
@@ -17,6 +21,8 @@ import java.util.Date;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static com.maciejwozny.budget.BudgetActivity.DEFAULT_BUDGET;
+import static com.maciejwozny.budget.SettingsActivity.BUDGET_VALUE;
+import static com.maciejwozny.budget.SettingsActivity.DAY_OF_PAYMENT;
 import static java.sql.Date.valueOf;
 import static org.junit.Assert.assertEquals;
 
@@ -42,7 +48,13 @@ public class IntegrationTest {
 
     @Before
     public void setup() {
-        sut = Budget.build(RuntimeEnvironment.application, calendar);
+        Context context = RuntimeEnvironment.application;
+        sut = Budget.build(context, calendar);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(BUDGET_VALUE, "1500");
+        editor.putString(DAY_OF_PAYMENT, "10");
+        editor.commit();
     }
 
     private void setToday(Date today) {
@@ -54,48 +66,49 @@ public class IntegrationTest {
         setToday(FIRST_DAY_OF_PERIOD);
 
         assertEquals(0, sut.monthlyBudget.getMonthlySpends(), 0.001);
-        assertEquals(1000, sut.monthlyBudget.getMonthlyBudget(), 0.001);
-        assertEquals(1000, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
+        assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(), 0.001);
+        assertEquals(1500, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
 
-        assertEquals(33.33, sut.dailyBudget.getDailyBudget(), 0.001);
-        assertEquals(33.33, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
+        assertEquals(50, sut.dailyBudget.getDailyBudget(), 0.001);
+        assertEquals(50, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
 
-        sut.expenseAdditional.addExpense("name", 33.33, FIRST_DAY_OF_PERIOD_STRING);
+        sut.expenseAdditional.addExpense("name", 50, FIRST_DAY_OF_PERIOD_STRING);
 
-        assertEquals(33.33, sut.monthlyBudget.getMonthlySpends(), 0.001);
-        assertEquals(1000, sut.monthlyBudget.getMonthlyBudget(), 0.001);
-        assertEquals(966.67, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
+        assertEquals(50, sut.monthlyBudget.getMonthlySpends(), 0.001);
+        assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(), 0.001);
+        assertEquals(1450, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
 
-        assertEquals(33.33, sut.dailyBudget.getDailyBudget(), 0.001);
+        assertEquals(50, sut.dailyBudget.getDailyBudget(), 0.001);
         assertEquals(0, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
     }
 
 
     @Test
     public void shouldCorrectShowsBudgetsInNextMonthButInTheSamePeriod() {
-        sut.expenseAdditional.addExpense("name", 750, FIRST_DAY_OF_PERIOD_STRING);
+        sut.expenseAdditional.addExpense("name", 1000, FIRST_DAY_OF_PERIOD_STRING);
 
         setToday(FIRST_DAY_OF_NEXT_MONTH);
 
-        assertEquals(750, sut.monthlyBudget.getMonthlySpends(), 0.001);
-        assertEquals(1000, sut.monthlyBudget.getMonthlyBudget(), 0.001);
-        assertEquals(250, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
+        assertEquals(1000, sut.monthlyBudget.getMonthlySpends(), 0.001);
+        assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(), 0.001);
+        assertEquals(500, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
 
-        assertEquals(27.77, sut.dailyBudget.getDailyBudget(), 0.001);
-        assertEquals(27.77, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
+        assertEquals(55.55, sut.dailyBudget.getDailyBudget(), 0.001);
+        assertEquals(55.55, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
     }
 
-//    @Test
-    public void shouldCorrectShowsBudgetsThenNumbersAreFloat() {
+    @Test
+    public void shouldCorrectShowsBudgetsWhenNumbersAreFloat() {
         setToday(FIRST_DAY_OF_PERIOD);
 
-        sut.expenseAdditional.addExpense("name", 99.75, FIRST_DAY_OF_PERIOD_STRING);
+        sut.expenseAdditional.addExpense("name1", 94.66, FIRST_DAY_OF_PERIOD_STRING);
+        sut.expenseAdditional.addExpense("name2", 33.33, FIRST_DAY_OF_PERIOD_STRING);
 
-        assertEquals(99.75, sut.monthlyBudget.getMonthlySpends(), 0.001);
+        assertEquals(127.99, sut.monthlyBudget.getMonthlySpends(), 0.001);
         assertEquals(1500, sut.monthlyBudget.getMonthlyBudget(), 0.001);
-        assertEquals(400.25, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
+        assertEquals(1372.01, sut.monthlyBudget.getMonthlyRemaining(), 0.001);
 
         assertEquals(50, sut.dailyBudget.getDailyBudget(), 0.001);
-        assertEquals(-49.75, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
+        assertEquals(-77.99, sut.dailyBudget.getDailyRemainingBudget(), 0.001);
     }
 }

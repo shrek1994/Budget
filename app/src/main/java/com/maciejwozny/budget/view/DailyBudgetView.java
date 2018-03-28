@@ -11,7 +11,7 @@ import java.util.Observer;
 
 /**
  * Created by Maciej Wozny on 21.10.2017.
- * 2017 All rights reserved.
+ * 2017-2018 All rights reserved.
  */
 public class DailyBudgetView implements Observer {
     private static final String TAG = DailyBudgetView.class.getSimpleName();
@@ -30,9 +30,7 @@ public class DailyBudgetView implements Observer {
     public void update(Observable o, Object obj) {
         Log.d(TAG, "refreshing");
         //TODO move to strings.xml !
-        todayBudget.setText("Today's budget: "
-                + dailyBudget.getDailyBudget());
-        remainingDailyBudget.setText("Today's remaining budget: "
-                + dailyBudget.getDailyRemainingBudget());
+        todayBudget.setText("Today's budget: " + dailyBudget.getDailyBudget());
+        remainingDailyBudget.setText("Today's remaining budget: "+ dailyBudget.getDailyRemainingBudget());
     }
 }

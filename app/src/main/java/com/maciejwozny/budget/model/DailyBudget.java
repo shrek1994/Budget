@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * Created by Maciej Wozny on 20.10.2017.
- * 2017 All rights reserved.
+ * 2017-2018 All rights reserved.
  */
 public class DailyBudget {
     private Context context;
@@ -33,8 +33,8 @@ public class DailyBudget {
         Date firstDayOfPeriod = Utils.getFirstDayOfPeriod(calendar, beginningDay);
         double amount = Utils.getAmount(budgetDatabase, firstDayOfPeriod);
         double todaySpends = Utils.getAmount(budgetDatabase, calendar.getTime());
-
-        return (double)((int)((monthlyBudget - amount + todaySpends) * 100 / daysLeft)) / 100;
+        double dailyBudget = (double)((int)((monthlyBudget - amount + todaySpends) * 100 / daysLeft)) / 100;
+        return Utils.getOnlyTwoDigitsAfterDot(dailyBudget);
     }
 
     private int getDaysLeft(int beginningDay) {
@@ -55,6 +55,7 @@ public class DailyBudget {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         Date today = new Date(calendar.getTimeInMillis());
-        return getDailyBudget() - Utils.getAmount(budgetDatabase, today);
+        double dailyRemainingBudget = getDailyBudget() - Utils.getAmount(budgetDatabase, today);
+        return Utils.getOnlyTwoDigitsAfterDot(dailyRemainingBudget);
     }
 }
